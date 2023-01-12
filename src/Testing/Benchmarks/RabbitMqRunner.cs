@@ -32,9 +32,9 @@ public class RabbitMqRunner : IDisposable
     }
 
     [IterationSetup]
-    public void BuildDatabase()
+    public async Task BuildDatabase()
     {
-        theDriver.Start(opts =>
+        await theDriver.Start(opts =>
         {
             opts.Node.DurabilityAgentEnabled = false;
 
@@ -57,15 +57,15 @@ public class RabbitMqRunner : IDisposable
             opts.ListenToRabbitQueue(queueName)
                 .MaximumParallelMessages(NumberOfThreads)
                 .ListenerCount(ListenerCount);
-        }).GetAwaiter().GetResult();
+        });
 
-        theDriver.Host.ResetResourceState().GetAwaiter().GetResult();
+        await theDriver.Host.ResetResourceState();
     }
 
     [IterationCleanup]
-    public void Teardown()
+    public async Task Teardown()
     {
-        theDriver.Teardown().GetAwaiter().GetResult();
+        await theDriver.Teardown();
     }
 
     [Benchmark]

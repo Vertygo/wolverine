@@ -31,9 +31,9 @@ public class PersistenceRunner : IDisposable
     }
 
     [IterationSetup]
-    public void BuildDatabase()
+    public async Task BuildDatabase()
     {
-        theDriver.Start(opts =>
+        await theDriver.Start(opts =>
         {
             opts.Node.DurabilityAgentEnabled = false;
             if (DatabaseEngine == "SqlServer")
@@ -44,7 +44,7 @@ public class PersistenceRunner : IDisposable
             {
                 opts.PersistMessagesWithPostgresql(Servers.PostgresConnectionString);
             }
-        }).GetAwaiter().GetResult();
+        });
 
         theEnvelopes = theDriver.Targets.Select(x =>
         {
@@ -65,9 +65,9 @@ public class PersistenceRunner : IDisposable
     }
 
     [IterationCleanup]
-    public void Teardown()
+    public async Task Teardown()
     {
-        theDriver.Teardown().GetAwaiter().GetResult();
+        await theDriver.Teardown();
     }
 
     [Benchmark]
@@ -89,10 +89,10 @@ public class PersistenceRunner : IDisposable
     }
 
     [IterationSetup(Target = nameof(LoadIncoming))]
-    public void LoadIncomingSetup()
+    public async Task LoadIncomingSetup()
     {
         BuildDatabase();
-        StoreIncoming().GetAwaiter().GetResult();
+        await StoreIncoming();
     }
 
     [Benchmark]
@@ -102,10 +102,10 @@ public class PersistenceRunner : IDisposable
     }
 
     [IterationSetup(Target = nameof(LoadOutgoing))]
-    public void LoadOutgoingSetup()
+    public async Task LoadOutgoingSetup()
     {
         BuildDatabase();
-        StoreOutgoing().GetAwaiter().GetResult();
+        await StoreOutgoing();
     }
 
     [Benchmark]

@@ -30,9 +30,9 @@ public class LocalRunner : IDisposable
     }
 
     [IterationSetup]
-    public void BuildDatabase()
+    public async Task BuildDatabase()
     {
-        theDriver.Start(opts =>
+        await theDriver.Start(opts =>
         {
             opts.Node.DurabilityAgentEnabled = false;
             switch (DatabaseEngine)
@@ -48,13 +48,13 @@ public class LocalRunner : IDisposable
 
             opts.DefaultLocalQueue
                 .MaximumParallelMessages(NumberOfThreads);
-        }).GetAwaiter().GetResult();
+        });
     }
 
     [IterationCleanup]
-    public void Teardown()
+    public async Task Teardown()
     {
-        theDriver.Teardown().GetAwaiter().GetResult();
+        await theDriver.Teardown();
     }
 
     [Benchmark]

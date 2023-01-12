@@ -22,9 +22,9 @@ public class InvokeRunner : IDisposable
     }
 
     [IterationSetup]
-    public void BuildDatabase()
+    public async Task BuildDatabase()
     {
-        theDriver.Start(opts => { opts.Node.DurabilityAgentEnabled = false; }).GetAwaiter().GetResult();
+        await theDriver.Start(opts => { opts.Node.DurabilityAgentEnabled = false; });
     }
 
     [Benchmark]
