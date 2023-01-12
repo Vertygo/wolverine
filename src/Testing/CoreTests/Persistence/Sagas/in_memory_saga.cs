@@ -13,7 +13,7 @@ public class InMemorySagaHost : ISagaHost
 {
     private IHost _host;
 
-    public IHost BuildHost<TSaga>()
+    public async Task<IHost> BuildHost<TSaga>()
     {
         _host = WolverineHost.For(opts =>
         {
@@ -22,7 +22,7 @@ public class InMemorySagaHost : ISagaHost
             opts.PublishAllMessages().To(TransportConstants.LocalUri);
         });
 
-        return _host;
+        return await Task.FromResult(_host);
     }
 
     public Task<T> LoadState<T>(Guid id) where T : class
