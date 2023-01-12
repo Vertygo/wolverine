@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <IsPackable>false</IsPackable>
-
         <LangVersion>10</LangVersion>
     </PropertyGroup>
 
@@ -21,6 +20,10 @@
         <ProjectReference Include="..\OrderExtension\OrderExtension.csproj" />
         <ProjectReference Include="..\Module1\Module1.csproj" />
         <ProjectReference Include="..\TestingSupport\TestingSupport.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="$(SolutionDir)xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>
