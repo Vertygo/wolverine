@@ -32,5 +32,14 @@ jobs:
         dotnet-version: 7.0.x
 
 
-    - name: Test
-      run: dotnet run -p build/build.csproj -- full
+    - name: Core Tests
+      run: dotnet test --no-build --no-restore src/Testing/CoreTests/CoreTests.csproj --logger "console;verbosity=detailed"
+        
+    - name: Persistence Tests
+      run: dotnet test --no-build --no-restore src/Persistence/PersistenceTests/PersistenceTests.csproj --logger "console;verbosity=detailed"
+        
+    - name: RabbitMQ Tests
+      run: dotnet test --no-build --no-restore src/Transports/Wolverine.RabbitMQ.Tests/Wolverine.RabbitMQ.Tests.csproj --logger "console;verbosity=detailed"
+        
+    - name: Pulsar Tests
+      run: dotnet test --no-build --no-restore src/Transports/Wolverine.Pulsar.Tests/Wolverine.Pulsar.Tests.csproj --logger "console;verbosity=detailed"
