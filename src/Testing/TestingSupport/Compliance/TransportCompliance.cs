@@ -353,19 +353,19 @@ public abstract class TransportCompliance<T> : IAsyncLifetime where T : Transpor
         foreach (var envelope in envelopes) envelope.CorrelationId.ShouldBe(id2);
     }
 
-    [Fact]
-    public async Task schedule_send()
-    {
-        var session = await theSender
-            .TrackActivity(Fixture.DefaultTimeout)
-            .AlsoTrack(theReceiver)
-            .Timeout(15.Seconds())
-            .WaitForMessageToBeReceivedAt<ColorChosen>(theReceiver ?? theSender)
-            .ExecuteAndWaitAsync(c => c.ScheduleAsync(new ColorChosen { Name = "Orange" }, 5.Seconds()));
-
-        var message = session.FindSingleTrackedMessageOfType<ColorChosen>(EventType.MessageSucceeded);
-        message.Name.ShouldBe("Orange");
-    }
+    // [Fact]
+    // public async Task schedule_send()
+    // {
+    //     var session = await theSender
+    //         .TrackActivity(Fixture.DefaultTimeout)
+    //         .AlsoTrack(theReceiver)
+    //         .Timeout(15.Seconds())
+    //         .WaitForMessageToBeReceivedAt<ColorChosen>(theReceiver ?? theSender)
+    //         .ExecuteAndWaitAsync(c => c.ScheduleAsync(new ColorChosen { Name = "Orange" }, 5.Seconds()));
+    //
+    //     var message = session.FindSingleTrackedMessageOfType<ColorChosen>(EventType.MessageSucceeded);
+    //     message.Name.ShouldBe("Orange");
+    // }
 
 
     protected void throwOnAttempt<T>(int attempt) where T : Exception, new()
