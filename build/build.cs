@@ -234,6 +234,8 @@ namespace build
             var path = paths.Length == 1
                 ? $"src/Testing/{projectName}/{projectName}.csproj"
                 : $"src/{string.Join('/', paths.SkipLast(1))}/{projectName}/{projectName}.csproj";
+
+            Console.WriteLine($"path:" + path);
             
             Run("dotnet", $"test --no-build --no-restore " + path + " --logger \"console;verbosity=detailed\"");
         }

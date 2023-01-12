@@ -9,21 +9,18 @@ public static class TaskExtensions
 {
     public static Task TimeoutAfterAsync(this Task task, int millisecondsTimeout)
     {
-#pragma warning disable VSTHRD105
-        return task.ContinueWith(_ => true).TimeoutAfterAsync(millisecondsTimeout);
-#pragma warning restore VSTHRD105
+        var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+        return task.ContinueWith(_ => true, scheduler).TimeoutAfterAsync(millisecondsTimeout);
     }
 
 
     // All of this was taken from https://blogs.msdn.microsoft.com/pfxteam/2011/11/10/crafting-a-task-timeoutafter-method/
-    public static Task<T> TimeoutAfterAsync<T>(this Task<T> task, int millisecondsTimeout)
+    public static async Task<T> TimeoutAfterAsync<T>(this Task<T> task, int millisecondsTimeout)
     {
         // Short-circuit #1: infinite timeout or task already completed
         if (task.IsCompleted || millisecondsTimeout == Timeout.Infinite)
         {
-#pragma warning disable VSTHRD003
-            return task;
-#pragma warning restore VSTHRD003
+            return await task;
         }
 
         // tcs.Task will be returned as a proxy to the caller
@@ -35,7 +32,7 @@ public static class TaskExtensions
         {
             // We've already timed out.
             tcs.SetException(new TimeoutException());
-            return tcs.Task;
+            return await tcs.Task;
         }
 
         // Set up a timer to complete after the specified timeout period
@@ -50,7 +47,7 @@ public static class TaskExtensions
 
         // Wire up the logic for what happens when source task completes
 #pragma warning disable VSTHRD110
-        task.ContinueWith((antecedent, state) =>
+         await task.ContinueWith(async (antecedent, state) =>
 #pragma warning restore VSTHRD110
             {
                 // Recover our state data
@@ -61,17 +58,17 @@ public static class TaskExtensions
                 tuple.Item1.Dispose();
 
                 // Marshal results to proxy
-                MarshalTaskResults(antecedent, tuple.Item2);
+                await MarshalTaskResults(antecedent, tuple.Item2);
             },
             Tuple.Create(timer, tcs),
             CancellationToken.None,
             TaskContinuationOptions.ExecuteSynchronously,
             TaskScheduler.Default);
 
-        return tcs.Task;
+        return await tcs.Task;
     }
 
-    internal static void MarshalTaskResults<TResult>(
+    internal static async Task MarshalTaskResults<TResult>(
         Task source, TaskCompletionSource<TResult> proxy)
     {
         switch (source.Status)
@@ -92,9 +89,7 @@ public static class TaskExtensions
                     (castedSource == null
                         ? default
                         : // source is a Task
-#pragma warning disable VSTHRD002
-                        castedSource.Result)!); // source is a Task<TResult>
-#pragma warning restore VSTHRD002
+                        await castedSource)!); // source is a Task<TResult>
                 break;
         }
     }
