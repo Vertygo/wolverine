@@ -69,7 +69,6 @@ public sealed class HandlerSource
 
         Assemblies.Fill(options.ApplicationAssembly);
 
-
         var types = await TypeRepository.FindTypes(Assemblies,
                 TypeClassification.Concretes | TypeClassification.Closed, type => _typeFilters.Matches(type))
             .ConfigureAwait(false);

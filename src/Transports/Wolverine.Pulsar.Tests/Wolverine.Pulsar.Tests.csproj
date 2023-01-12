@@ -1,10 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-
         <IsPackable>false</IsPackable>
-
         <RootNamespace>Jasper.Pulsar.Tests</RootNamespace>
     </PropertyGroup>
 

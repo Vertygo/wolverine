@@ -37,6 +37,7 @@ public class RabbitMqTransportFixture : TransportComplianceFixture, IAsyncLifeti
 
     public Task DisposeAsync()
     {
+        Dispose();
         return Task.CompletedTask;
     }
 }

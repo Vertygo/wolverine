@@ -40,6 +40,7 @@ public class PrefixedComplianceFixture : TransportComplianceFixture, IAsyncLifet
 
     public Task DisposeAsync()
     {
+        Dispose();
         return Task.CompletedTask;
     }
 }

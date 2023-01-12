@@ -36,6 +36,7 @@ public class InlinePulsarTransportFixture : TransportComplianceFixture, IAsyncLi
 
     public Task DisposeAsync()
     {
+        Dispose();
         return Task.CompletedTask;
     }
 

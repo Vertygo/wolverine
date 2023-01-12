@@ -50,6 +50,7 @@ public class DurableComplianceFixture : TransportComplianceFixture, IAsyncLifeti
 
     public Task DisposeAsync()
     {
+        Dispose();
         return Task.CompletedTask;
     }
 

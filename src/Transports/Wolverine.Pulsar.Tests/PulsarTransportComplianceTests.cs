@@ -35,6 +35,7 @@ public class PulsarTransportFixture : TransportComplianceFixture, IAsyncLifetime
 
     public Task DisposeAsync()
     {
+        Dispose();
         return Task.CompletedTask;
     }
 

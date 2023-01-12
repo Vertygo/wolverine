@@ -285,11 +285,7 @@ internal class TrackedSession : ITrackedSession
 
     private void startTimeoutTracking()
     {
-#pragma warning disable 4014
-#pragma warning disable VSTHRD110
-        Task.Factory.StartNew(async () =>
-#pragma warning restore VSTHRD110
-#pragma warning restore 4014
+        _ = Task.Factory.StartNew(async () =>
         {
             await Task.Delay(Timeout);
 

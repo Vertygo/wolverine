@@ -36,15 +36,15 @@ public class TrackedSessionTester : IDisposable
         theSession.AssertNoExceptionsWereThrown();
     }
 
-    // [Fact]
-    // public async Task throw_if_any_exceptions_sad_path()
-    // {
-    //     theSession.Record(EventType.ExecutionStarted, theEnvelope, "", 1);
-    //     theSession.Record(EventType.ExecutionFinished, theEnvelope, "", 1, new DivideByZeroException());
-    //     await theSession.TrackAsync();
-    //
-    //     Should.Throw<AggregateException>(() => theSession.AssertNoExceptionsWereThrown());
-    // }
+    [Fact]
+    public async Task throw_if_any_exceptions_sad_path()
+    {
+        theSession.Record(EventType.ExecutionStarted, theEnvelope, "", 1);
+        theSession.Record(EventType.ExecutionFinished, theEnvelope, "", 1, new DivideByZeroException());
+        await theSession.TrackAsync();
+    
+        Should.Throw<AggregateException>(() => theSession.AssertNoExceptionsWereThrown());
+    }
 
     [Fact]
     public async Task throw_if_any_exceptions_and_completed_happy_path()
