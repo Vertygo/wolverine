@@ -22,6 +22,7 @@ public class LightweightTcpFixture : TransportComplianceFixture, IAsyncLifetime
 
     public Task DisposeAsync()
     {
+        Dispose();
         return Task.CompletedTask;
     }
 }

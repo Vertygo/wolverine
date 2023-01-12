@@ -39,9 +39,10 @@ public class when_durable_receiver_detects_duplicate_incoming_envelope : IAsyncL
         await theReceiver.DrainAsync();
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        return Task.CompletedTask;
+        await theReceiver.DisposeAsync();
+        theRuntime.Dispose();
     }
 
     [Fact]
