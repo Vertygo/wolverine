@@ -8,9 +8,9 @@ public class BufferedComplianceFixture : TransportComplianceFixture, IAsyncLifet
     {
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
-        await SenderIs(opts =>
+        SenderIs(opts =>
         {
             opts.UseAmazonSqsTransportLocally()
                 .AutoProvision()
@@ -19,7 +19,7 @@ public class BufferedComplianceFixture : TransportComplianceFixture, IAsyncLifet
             opts.ListenToSqsQueue("buffered-sender");
         });
 
-        await ReceiverIs(opts =>
+        ReceiverIs(opts =>
         {
             opts.UseAmazonSqsTransportLocally()
                 .AutoProvision()
@@ -27,6 +27,8 @@ public class BufferedComplianceFixture : TransportComplianceFixture, IAsyncLifet
 
             opts.ListenToSqsQueue("buffered-receiver");
         });
+        
+        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

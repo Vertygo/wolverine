@@ -11,9 +11,9 @@ public class BufferedComplianceFixture : TransportComplianceFixture, IAsyncLifet
     {
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
-        await SenderIs(opts =>
+        SenderIs(opts =>
         {
             opts.UseAzureServiceBusTesting()
                 .AutoProvision()
@@ -22,7 +22,7 @@ public class BufferedComplianceFixture : TransportComplianceFixture, IAsyncLifet
             opts.ListenToAzureServiceBusQueue("buffered-sender");
         });
 
-        await ReceiverIs(opts =>
+        ReceiverIs(opts =>
         {
             opts.UseAzureServiceBusTesting()
                 .AutoProvision()
@@ -30,6 +30,8 @@ public class BufferedComplianceFixture : TransportComplianceFixture, IAsyncLifet
 
             opts.ListenToAzureServiceBusQueue("buffered-receiver");
         });
+        
+        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

@@ -13,24 +13,26 @@ public class PulsarTransportFixture : TransportComplianceFixture, IAsyncLifetime
     {
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
         var topic = Guid.NewGuid().ToString();
         var topicPath = $"persistent://public/default/compliance{topic}";
         OutboundAddress = PulsarEndpoint.UriFor(topicPath);
 
-        await SenderIs(opts =>
+        SenderIs(opts =>
         {
             var listener = $"persistent://public/default/replies{topic}";
             opts.UsePulsar(e => { });
             opts.ListenToPulsarTopic(listener).UseForReplies();
         });
 
-        await ReceiverIs(opts =>
+        ReceiverIs(opts =>
         {
             opts.UsePulsar();
             opts.ListenToPulsarTopic(topicPath);
         });
+        
+        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

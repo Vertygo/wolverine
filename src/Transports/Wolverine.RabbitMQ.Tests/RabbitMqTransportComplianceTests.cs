@@ -11,12 +11,12 @@ public class RabbitMqTransportFixture : TransportComplianceFixture, IAsyncLifeti
     {
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
         var queueName = RabbitTesting.NextQueueName();
         OutboundAddress = $"rabbitmq://queue/{queueName}".ToUri();
 
-        await SenderIs(opts =>
+        SenderIs(opts =>
         {
             var listener = $"listener{RabbitTesting.Number}";
 
@@ -28,11 +28,13 @@ public class RabbitMqTransportFixture : TransportComplianceFixture, IAsyncLifeti
             opts.ListenToRabbitQueue(listener);
         });
 
-        await ReceiverIs(opts =>
+        ReceiverIs(opts =>
         {
             opts.UseRabbitMq();
             opts.ListenToRabbitQueue(queueName);
         });
+        
+        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

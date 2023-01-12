@@ -61,7 +61,7 @@ public abstract class TransportComplianceFixture : IDisposable
         return Task.CompletedTask;
     }
 
-    protected async Task SenderIs(Action<WolverineOptions> configure)
+    protected void SenderIs(Action<WolverineOptions> configure)
     {
         Sender = WolverineHost.For(opts =>
         {
@@ -84,7 +84,7 @@ public abstract class TransportComplianceFixture : IDisposable
         options.Services.AddResourceSetupOnStartup(StartupAction.ResetState);
     }
 
-    public async Task ReceiverIs(Action<WolverineOptions> configure)
+    public  void ReceiverIs(Action<WolverineOptions> configure)
     {
         Receiver = WolverineHost.For(opts =>
         {

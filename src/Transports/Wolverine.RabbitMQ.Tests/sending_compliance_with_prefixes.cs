@@ -15,9 +15,9 @@ public class PrefixedComplianceFixture : TransportComplianceFixture, IAsyncLifet
     {
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
-        await SenderIs(opts =>
+        SenderIs(opts =>
         {
             opts.UseRabbitMq()
                 .PrefixIdentifiers("foo")
@@ -27,7 +27,7 @@ public class PrefixedComplianceFixture : TransportComplianceFixture, IAsyncLifet
             opts.ListenToRabbitQueue("buffered-sender");
         });
 
-        await ReceiverIs(opts =>
+        ReceiverIs(opts =>
         {
             opts.UseRabbitMq()
                 .PrefixIdentifiers("foo")
@@ -36,6 +36,8 @@ public class PrefixedComplianceFixture : TransportComplianceFixture, IAsyncLifet
 
             opts.ListenToRabbitQueue("buffered-receiver");
         });
+        
+        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

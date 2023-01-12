@@ -16,11 +16,11 @@ public class DurableTcpTransportFixture : TransportComplianceFixture, IAsyncLife
     {
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
         OutboundAddress = $"tcp://localhost:{PortFinder.GetAvailablePort()}/incoming/durable".ToUri();
 
-        await SenderIs(opts =>
+        SenderIs(opts =>
         {
             var receivingUri = $"tcp://localhost:{PortFinder.GetAvailablePort()}/incoming/durable".ToUri();
             opts.ListenForMessagesFrom(receivingUri);
@@ -32,7 +32,7 @@ public class DurableTcpTransportFixture : TransportComplianceFixture, IAsyncLife
             }).IntegrateWithWolverine();
         });
 
-        await ReceiverIs(opts =>
+        ReceiverIs(opts =>
         {
             opts.ListenForMessagesFrom(OutboundAddress);
 
@@ -42,6 +42,8 @@ public class DurableTcpTransportFixture : TransportComplianceFixture, IAsyncLife
                 o.DatabaseSchemaName = "receiver";
             }).IntegrateWithWolverine();
         });
+        
+        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()
