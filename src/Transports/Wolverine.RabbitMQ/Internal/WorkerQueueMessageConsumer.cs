@@ -7,7 +7,7 @@ using Wolverine.Transports;
 
 namespace Wolverine.RabbitMQ.Internal;
 
-internal class WorkerQueueMessageConsumer : DefaultBasicConsumer, IDisposable
+internal class WorkerQueueMessageConsumer : AsyncDefaultBasicConsumer, IDisposable
 {
     private readonly Uri _address;
     private readonly CancellationToken _cancellation;
@@ -34,7 +34,8 @@ internal class WorkerQueueMessageConsumer : DefaultBasicConsumer, IDisposable
         _latched = true;
     }
 
-    public override void HandleBasicDeliver(string consumerTag, ulong deliveryTag, bool redelivered,
+    
+    public override async Task HandleBasicDeliver(string consumerTag, ulong deliveryTag, bool redelivered,
         string exchange, string routingKey,
         IBasicProperties properties, ReadOnlyMemory<byte> body)
     {
@@ -65,9 +66,7 @@ internal class WorkerQueueMessageConsumer : DefaultBasicConsumer, IDisposable
             return;
         }
 
-#pragma warning disable VSTHRD110
-        _workerQueue.ReceivedAsync(_listener, envelope).AsTask().ContinueWith(t =>
-#pragma warning restore VSTHRD110
+        await _workerQueue.ReceivedAsync(_listener, envelope).AsTask().ContinueWith(t =>
         {
             if (t.IsFaulted)
             {

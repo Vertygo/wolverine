@@ -46,9 +46,7 @@ public static class TaskExtensions
         }, tcs, millisecondsTimeout, Timeout.Infinite);
 
         // Wire up the logic for what happens when source task completes
-#pragma warning disable VSTHRD110
          await task.ContinueWith(async (antecedent, state) =>
-#pragma warning restore VSTHRD110
             {
                 // Recover our state data
                 var tuple =

@@ -32,13 +32,9 @@ internal class BackPressureAgent : IDisposable
         _timer.Elapsed += TimerOnElapsed;
     }
 
-    private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
+    private async void TimerOnElapsed(object? sender, ElapsedEventArgs e)
     {
-#pragma warning disable CS4014
-#pragma warning disable VSTHRD110
-        CheckNowAsync();
-#pragma warning restore VSTHRD110
-#pragma warning restore CS4014
+        await CheckNowAsync();
     }
 
     public ValueTask CheckNowAsync()
