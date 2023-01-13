@@ -34,6 +34,8 @@ internal abstract class RabbitMqConnectionAgent : IDisposable
             return;
         }
 
+        lock (Locker)
+        {
             if (State == AgentState.Connected)
             {
                 return;
@@ -42,6 +44,7 @@ internal abstract class RabbitMqConnectionAgent : IDisposable
             startNewChannel();
 
             State = AgentState.Connected;
+        }
     }
 
     protected void startNewChannel()
