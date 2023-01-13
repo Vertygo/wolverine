@@ -237,7 +237,7 @@ namespace build
 
             Console.WriteLine("dotnet test --no-build --no-restore " + path + " --logger \"console;verbosity=detailed\"");
             
-            //Run("dotnet", $"test --no-build --no-restore " + path + " --logger \"console;verbosity=detailed\"");
+            Run("dotnet", $"test --no-build --no-restore " + path + " --logger \"console;verbosity=detailed\"");
         }
 
         private static string GetEnvironmentVariable(string variableName)
