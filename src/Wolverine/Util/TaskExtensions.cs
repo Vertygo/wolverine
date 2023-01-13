@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Threading;
 
 namespace Wolverine.Util;
 
@@ -20,7 +21,7 @@ public static class TaskExtensions
         // Short-circuit #1: infinite timeout or task already completed
         if (task.IsCompleted || millisecondsTimeout == Timeout.Infinite)
         {
-            return await task;
+            return task.Result;
         }
 
         // tcs.Task will be returned as a proxy to the caller
@@ -53,7 +54,7 @@ public static class TaskExtensions
                     (Tuple<Timer, TaskCompletionSource<T>>)state!;
 
                 // Cancel the Timer
-                tuple.Item1.Dispose();
+                await tuple.Item1.DisposeAsync();
 
                 // Marshal results to proxy
                 await MarshalTaskResults(antecedent, tuple.Item2);
