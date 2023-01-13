@@ -1,6 +1,7 @@
 ﻿using IntegrationTests;
 using Marten;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.Threading;
 using Wolverine;
 using Wolverine.Attributes;
 using Wolverine.Marten;
@@ -52,8 +53,9 @@ public class MartenDurabilityCompliance : DurabilityComplianceContext<TriggerMes
     protected override IReadOnlyList<Envelope> loadAllOutgoingEnvelopes(IHost sender)
     {
         var admin = sender.Get<IMessageStore>().Admin;
-
-        return admin.AllOutgoingAsync().GetAwaiter().GetResult();
+        JoinableTaskFactory joinableTaskFactory = new JoinableTaskFactory(new JoinableTaskContext());
+        return joinableTaskFactory.Run<IReadOnlyList<Envelope>>(async () => await admin.AllOutgoingAsync());
+        
     }
 }
 

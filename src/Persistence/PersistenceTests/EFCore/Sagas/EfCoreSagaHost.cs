@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.Threading;
 using Oakton.Resources;
 using TestingSupport;
 using TestingSupport.Sagas;
@@ -36,7 +37,11 @@ public class EfCoreSagaHost : ISagaHost
         });
 
         // Watch if this hangs, might have to get fancier
-        Initialize().GetAwaiter().GetResult();
+        JoinableTaskFactory joinableTaskFactory = new JoinableTaskFactory(new JoinableTaskContext());
+        joinableTaskFactory.Run(async () =>
+        {
+            await Initialize();
+        });
 
         return _host;
     }

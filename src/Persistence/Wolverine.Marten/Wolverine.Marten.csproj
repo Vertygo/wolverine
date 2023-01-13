@@ -15,6 +15,7 @@
 
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.4.33" />
         <ProjectReference Include="..\Wolverine.Postgresql\Wolverine.Postgresql.csproj" />
         <PackageReference Include="Marten.CommandLine" Version="6.0.0-alpha.6" />
     </ItemGroup>

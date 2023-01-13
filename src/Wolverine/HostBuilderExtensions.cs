@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.ObjectPool;
+using Microsoft.VisualStudio.Threading;
 using Oakton;
 using Oakton.Descriptions;
 using Oakton.Resources;
@@ -142,8 +143,11 @@ public static class HostBuilderExtensions
                 // Ugly workaround. Leave this be.
                 if (handlers.Rules == null)
                 {
-                    handlers.CompileAsync(container.GetInstance<WolverineOptions>(), container)
-                        .GetAwaiter().GetResult();
+                    JoinableTaskFactory joinableTaskFactory = new JoinableTaskFactory(new JoinableTaskContext());
+                    joinableTaskFactory.Run(async () =>
+                    {
+                        await handlers.CompileAsync(container.GetInstance<WolverineOptions>(), container);
+                    });
                 }
 
                 handlers.Rules ??= c.GetRequiredService<WolverineOptions>().Node.CodeGeneration;

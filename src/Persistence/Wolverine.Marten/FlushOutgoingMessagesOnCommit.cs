@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Marten;
 using Marten.Services;
 using Wolverine.Runtime;
+using Microsoft.VisualStudio.Threading;
 
 namespace Wolverine.Marten;
 
@@ -17,9 +18,8 @@ internal class FlushOutgoingMessagesOnCommit : DocumentSessionListenerBase
 
     public override void AfterCommit(IDocumentSession session, IChangeSet commit)
     {
-#pragma warning disable VSTHRD002
-        _context.FlushOutgoingMessagesAsync().GetAwaiter().GetResult();
-#pragma warning restore VSTHRD002
+        JoinableTaskFactory joinableTaskFactory = new JoinableTaskFactory(new JoinableTaskContext());
+        joinableTaskFactory.Run(async delegate { await _context.FlushOutgoingMessagesAsync(); });
     }
 
     public override Task AfterCommitAsync(IDocumentSession session, IChangeSet commit, CancellationToken token)
