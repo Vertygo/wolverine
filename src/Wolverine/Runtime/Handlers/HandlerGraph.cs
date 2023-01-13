@@ -195,8 +195,6 @@ public partial class HandlerGraph : ICodeFileCollection, IHandlerConfiguration
             }
             else
             {
-                lock (_compilingLock)
-                {
                     Debug.WriteLine("Starting to compile chain " + chain.MessageType.NameInCode());
                     if (chain.Handler == null)
                     {
@@ -209,7 +207,6 @@ public partial class HandlerGraph : ICodeFileCollection, IHandlerConfiguration
                     }
 
                     Debug.WriteLine("Finished building the chain " + chain.MessageType.NameInCode());
-                }
             }
 
             _handlers = _handlers.AddOrUpdate(messageType, handler);
@@ -259,8 +256,6 @@ public partial class HandlerGraph : ICodeFileCollection, IHandlerConfiguration
 
     public void Group()
     {
-        lock (_groupingLock)
-        {
             if (_hasGrouped)
             {
                 return;
@@ -273,7 +268,6 @@ public partial class HandlerGraph : ICodeFileCollection, IHandlerConfiguration
 
 
             _hasGrouped = true;
-        }
     }
 
     private HandlerChain buildHandlerChain(IGrouping<Type, HandlerCall> group)

@@ -71,8 +71,6 @@ internal class RabbitMqSender : RabbitMqConnectionAgent, ISender
 
     public Task<bool> PingAsync()
     {
-        lock (Locker)
-        {
             if (State == AgentState.Connected)
             {
                 return Task.FromResult(true);
@@ -87,6 +85,5 @@ internal class RabbitMqSender : RabbitMqConnectionAgent, ISender
 
             teardownChannel();
             return Task.FromResult(false);
-        }
     }
 }

@@ -106,8 +106,6 @@ public class EndpointCollection : IEndpointCollection
             return agent;
         }
 
-        lock (_channelLock)
-        {
             if (_senders.TryFind(address, out agent))
             {
                 return agent;
@@ -117,7 +115,6 @@ public class EndpointCollection : IEndpointCollection
             _senders = _senders.AddOrUpdate(address, agent);
 
             return agent;
-        }
     }
 
     public Endpoint? EndpointFor(Uri uri)
