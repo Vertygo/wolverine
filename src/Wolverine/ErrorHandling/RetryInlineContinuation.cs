@@ -25,10 +25,10 @@ internal class RetryInlineContinuation : IContinuation, IContinuationSource
     {
         if (_delay != null)
         {
-            await Task.Delay(_delay.Value).ConfigureAwait(false);
+            await Task.Delay(_delay.Value);
         }
 
-        await lifecycle.RetryExecutionNowAsync().ConfigureAwait(false);
+        await lifecycle.RetryExecutionNowAsync();
     }
 
     public string Description =>

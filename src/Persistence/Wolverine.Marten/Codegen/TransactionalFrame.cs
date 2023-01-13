@@ -70,7 +70,7 @@ internal class TransactionalFrame : Frame
         writer.BlankLine();
         writer.WriteComment("Commit the unit of work");
         writer.Write(
-            $"await {Session!.Usage}.{nameof(IDocumentSession.SaveChangesAsync)}(cancellation).ConfigureAwait(false);");
+            $"await {Session!.Usage}.{nameof(IDocumentSession.SaveChangesAsync)}(cancellation);");
     }
 
     public class Loaded

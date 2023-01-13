@@ -82,7 +82,7 @@ public partial class WolverineRuntime
         {
             if (!Options.Node.StubAllExternalTransports)
             {
-                await transport.InitializeAsync(this).ConfigureAwait(false);
+                await transport.InitializeAsync(this);
             }
             else
             {

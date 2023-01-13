@@ -163,7 +163,7 @@ public class HandlerPipeline : IHandlerPipeline
 
         var executor =_executors[envelope.Message!.GetType()];
 
-        var continuation = await executor.ExecuteAsync(context, _cancellation).ConfigureAwait(false);
+        var continuation = await executor.ExecuteAsync(context, _cancellation);
         Logger.ExecutionFinished(envelope);
 
         return continuation;

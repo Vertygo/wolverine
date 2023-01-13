@@ -14,7 +14,7 @@ internal static class StreamExtensions
         int current;
         do
         {
-            current = await stream.ReadAsync(buffer, totalRead, buffer.Length - totalRead).ConfigureAwait(false);
+            current = await stream.ReadAsync(buffer, totalRead, buffer.Length - totalRead);
             totalRead += current;
         } while (totalRead < length && current > 0);
 
@@ -25,7 +25,7 @@ internal static class StreamExtensions
     {
         try
         {
-            var bytes = await stream.ReadBytesAsync(expected.Length).ConfigureAwait(false);
+            var bytes = await stream.ReadBytesAsync(expected.Length);
             return expected.SequenceEqual(bytes);
         }
         catch (Exception)

@@ -22,7 +22,7 @@ internal class DbContextOutbox<T> : MessageContext, IDbContextOutbox<T> where T 
         await DbContext.SaveChangesAsync(token);
         if (DbContext.Database.CurrentTransaction != null)
         {
-            await DbContext.Database.CommitTransactionAsync(token).ConfigureAwait(false);
+            await DbContext.Database.CommitTransactionAsync(token);
         }
 
         await FlushOutgoingMessagesAsync();
@@ -55,7 +55,7 @@ internal class DbContextOutbox : MessageContext, IDbContextOutbox
 
         if (ActiveContext.Database.CurrentTransaction != null)
         {
-            await ActiveContext.Database.CommitTransactionAsync(token).ConfigureAwait(false);
+            await ActiveContext.Database.CommitTransactionAsync(token);
         }
 
         await FlushOutgoingMessagesAsync();

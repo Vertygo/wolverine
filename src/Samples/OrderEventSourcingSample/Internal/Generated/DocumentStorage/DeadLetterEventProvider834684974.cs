@@ -247,7 +247,7 @@ namespace Marten.Generated.DocumentStorage
         {
 
             Marten.Events.Daemon.DeadLetterEvent document;
-            document = await _serializer.FromJsonAsync<Marten.Events.Daemon.DeadLetterEvent>(reader, 0, token).ConfigureAwait(false);
+            document = await _serializer.FromJsonAsync<Marten.Events.Daemon.DeadLetterEvent>(reader, 0, token);
             return document;
         }
 
@@ -286,7 +286,7 @@ namespace Marten.Generated.DocumentStorage
             var id = await reader.GetFieldValueAsync<System.Guid>(0, token);
 
             Marten.Events.Daemon.DeadLetterEvent document;
-            document = await _serializer.FromJsonAsync<Marten.Events.Daemon.DeadLetterEvent>(reader, 1, token).ConfigureAwait(false);
+            document = await _serializer.FromJsonAsync<Marten.Events.Daemon.DeadLetterEvent>(reader, 1, token);
             _session.MarkAsDocumentLoaded(id, document);
             return document;
         }
@@ -329,7 +329,7 @@ namespace Marten.Generated.DocumentStorage
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
             Marten.Events.Daemon.DeadLetterEvent document;
-            document = await _serializer.FromJsonAsync<Marten.Events.Daemon.DeadLetterEvent>(reader, 1, token).ConfigureAwait(false);
+            document = await _serializer.FromJsonAsync<Marten.Events.Daemon.DeadLetterEvent>(reader, 1, token);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             return document;
@@ -374,7 +374,7 @@ namespace Marten.Generated.DocumentStorage
             if (_identityMap.TryGetValue(id, out var existing)) return existing;
 
             Marten.Events.Daemon.DeadLetterEvent document;
-            document = await _serializer.FromJsonAsync<Marten.Events.Daemon.DeadLetterEvent>(reader, 1, token).ConfigureAwait(false);
+            document = await _serializer.FromJsonAsync<Marten.Events.Daemon.DeadLetterEvent>(reader, 1, token);
             _session.MarkAsDocumentLoaded(id, document);
             _identityMap[id] = document;
             StoreTracker(_session, document);

@@ -44,7 +44,7 @@ public static class WireProtocol
         await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
 
         // All four of the possible receive confirmation messages are the same length: 8 characters long encoded in UTF-16.
-        var confirmationBytes = await stream.ReadBytesAsync(ReceivedBuffer.Length).ConfigureAwait(false);
+        var confirmationBytes = await stream.ReadBytesAsync(ReceivedBuffer.Length);
         if (confirmationBytes.SequenceEqual(ReceivedBuffer))
         {
             await callback.MarkSuccessfulAsync(batch);

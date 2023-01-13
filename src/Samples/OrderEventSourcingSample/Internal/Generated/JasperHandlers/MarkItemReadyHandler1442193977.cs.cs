@@ -27,7 +27,7 @@ namespace Internal.Generated.WolverineHandlers
             await using var documentSession = _outboxedSessionFactory.OpenSession(context);
             var eventStore = documentSession.Events;
             // Loading Marten aggregate
-            var eventStream = await eventStore.FetchForWriting<Order>(markItemReady.OrderId, markItemReady.Version, cancellation).ConfigureAwait(false);
+            var eventStream = await eventStore.FetchForWriting<Order>(markItemReady.OrderId, markItemReady.Version, cancellation);
 
             var outgoing1 = MarkItemReadyHandler.Handle(markItemReady, eventStream.Aggregate);
             if (outgoing1 != null)
@@ -37,7 +37,7 @@ namespace Internal.Generated.WolverineHandlers
 
             }
 
-            await documentSession.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await documentSession.SaveChangesAsync(cancellation);
         }
 
     }

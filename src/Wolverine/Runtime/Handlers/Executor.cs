@@ -157,7 +157,7 @@ internal class Executor : IExecutor
 
             if (retry.Delay.HasValue)
             {
-                await Task.Delay(retry.Delay.Value, cancellation).ConfigureAwait(false);
+                await Task.Delay(retry.Delay.Value, cancellation);
             }
 
             return InvokeResult.TryAgain;

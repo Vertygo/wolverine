@@ -26,9 +26,9 @@ namespace Internal.Generated.WolverineHandlers
             await using var documentSession = _outboxedSessionFactory.OpenSession(context);
             var eventStore = documentSession.Events;
             // Loading Marten aggregate
-            var eventStream = await eventStore.FetchForWriting<PersistenceTests.Marten.LetterAggregate>(incrementB.LetterAggregateId, cancellation).ConfigureAwait(false);
+            var eventStream = await eventStore.FetchForWriting<PersistenceTests.Marten.LetterAggregate>(incrementB.LetterAggregateId, cancellation);
 
-            var outgoing1 = await letterAggregateHandler.Handle(incrementB, eventStream.Aggregate, _logger).ConfigureAwait(false);
+            var outgoing1 = await letterAggregateHandler.Handle(incrementB, eventStream.Aggregate, _logger);
             if (outgoing1 != null)
             {
                 // Capturing any possible events returned from the command handlers
@@ -36,7 +36,7 @@ namespace Internal.Generated.WolverineHandlers
 
             }
 
-            await documentSession.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await documentSession.SaveChangesAsync(cancellation);
         }
 
     }

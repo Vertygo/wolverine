@@ -78,34 +78,34 @@ namespace Marten.Generated.EventStore
 
         public override async System.Threading.Tasks.Task ApplyReaderDataToEventAsync(System.Data.Common.DbDataReader reader, Marten.Events.IEvent e, System.Threading.CancellationToken token)
         {
-            if (!(await reader.IsDBNullAsync(3, token).ConfigureAwait(false)))
+            if (!(await reader.IsDBNullAsync(3, token)))
             {
-            var sequence = await reader.GetFieldValueAsync<long>(3, token).ConfigureAwait(false);
+            var sequence = await reader.GetFieldValueAsync<long>(3, token);
             e.Sequence = sequence;
             }
-            if (!(await reader.IsDBNullAsync(4, token).ConfigureAwait(false)))
+            if (!(await reader.IsDBNullAsync(4, token)))
             {
-            var id = await reader.GetFieldValueAsync<System.Guid>(4, token).ConfigureAwait(false);
+            var id = await reader.GetFieldValueAsync<System.Guid>(4, token);
             e.Id = id;
             }
-            var streamId = await reader.GetFieldValueAsync<System.Guid>(5, token).ConfigureAwait(false);
+            var streamId = await reader.GetFieldValueAsync<System.Guid>(5, token);
             e.StreamId = streamId;
-            if (!(await reader.IsDBNullAsync(6, token).ConfigureAwait(false)))
+            if (!(await reader.IsDBNullAsync(6, token)))
             {
-            var version = await reader.GetFieldValueAsync<long>(6, token).ConfigureAwait(false);
+            var version = await reader.GetFieldValueAsync<long>(6, token);
             e.Version = version;
             }
-            if (!(await reader.IsDBNullAsync(7, token).ConfigureAwait(false)))
+            if (!(await reader.IsDBNullAsync(7, token)))
             {
-            var timestamp = await reader.GetFieldValueAsync<System.DateTimeOffset>(7, token).ConfigureAwait(false);
+            var timestamp = await reader.GetFieldValueAsync<System.DateTimeOffset>(7, token);
             e.Timestamp = timestamp;
             }
-            if (!(await reader.IsDBNullAsync(8, token).ConfigureAwait(false)))
+            if (!(await reader.IsDBNullAsync(8, token)))
             {
-            var tenantId = await reader.GetFieldValueAsync<string>(8, token).ConfigureAwait(false);
+            var tenantId = await reader.GetFieldValueAsync<string>(8, token);
             e.TenantId = tenantId;
             }
-            var isArchived = await reader.GetFieldValueAsync<bool>(9, token).ConfigureAwait(false);
+            var isArchived = await reader.GetFieldValueAsync<bool>(9, token);
             e.IsArchived = isArchived;
         }
 
@@ -233,16 +233,16 @@ namespace Marten.Generated.EventStore
         public override async System.Threading.Tasks.Task<Marten.Events.StreamState> ResolveAsync(Marten.Internal.IMartenSession session, System.Data.Common.DbDataReader reader, System.Threading.CancellationToken token)
         {
             var streamState = new Marten.Events.StreamState();
-            var id = await reader.GetFieldValueAsync<System.Guid>(0, token).ConfigureAwait(false);
+            var id = await reader.GetFieldValueAsync<System.Guid>(0, token);
             streamState.Id = id;
-            var version = await reader.GetFieldValueAsync<long>(1, token).ConfigureAwait(false);
+            var version = await reader.GetFieldValueAsync<long>(1, token);
             streamState.Version = version;
-            await SetAggregateTypeAsync(streamState, reader, session, token).ConfigureAwait(false);
-            var lastTimestamp = await reader.GetFieldValueAsync<System.DateTimeOffset>(3, token).ConfigureAwait(false);
+            await SetAggregateTypeAsync(streamState, reader, session, token);
+            var lastTimestamp = await reader.GetFieldValueAsync<System.DateTimeOffset>(3, token);
             streamState.LastTimestamp = lastTimestamp;
-            var created = await reader.GetFieldValueAsync<System.DateTimeOffset>(4, token).ConfigureAwait(false);
+            var created = await reader.GetFieldValueAsync<System.DateTimeOffset>(4, token);
             streamState.Created = created;
-            var isArchived = await reader.GetFieldValueAsync<bool>(5, token).ConfigureAwait(false);
+            var isArchived = await reader.GetFieldValueAsync<bool>(5, token);
             streamState.IsArchived = isArchived;
             return streamState;
         }

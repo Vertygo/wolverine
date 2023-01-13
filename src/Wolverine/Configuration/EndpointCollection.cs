@@ -170,7 +170,7 @@ public class EndpointCollection : IEndpointCollection
         {
             endpoint.Compile(_runtime);
             var agent = new ListeningAgent(endpoint, _runtime);
-            await agent.StartAsync().ConfigureAwait(false);
+            await agent.StartAsync();
             _listeners[agent.Uri] = agent;
         }
     }

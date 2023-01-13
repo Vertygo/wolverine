@@ -81,8 +81,8 @@ public class TestingListeningAgent : IDisposable, IListener
         {
             while (!_cancellationToken.IsCancellationRequested)
             {
-                var socket = await _listener.AcceptSocketAsync(_cancellationToken).ConfigureAwait(false);
-                await _socketHandling.SendAsync(socket, _cancellationToken).ConfigureAwait(false);
+                var socket = await _listener.AcceptSocketAsync(_cancellationToken);
+                await _socketHandling.SendAsync(socket, _cancellationToken);
             }
         }, _cancellationToken);
     }

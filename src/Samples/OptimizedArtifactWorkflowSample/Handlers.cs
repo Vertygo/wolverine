@@ -17,8 +17,8 @@ public class MessageSender : BackgroundService
         var count = 0;
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(500.Milliseconds(), stoppingToken).ConfigureAwait(false);
-            await _bus.PublishAsync(new TrackedMessage { Number = ++count }).ConfigureAwait(false);
+            await Task.Delay(500.Milliseconds(), stoppingToken);
+            await _bus.PublishAsync(new TrackedMessage { Number = ++count });
         }
     }
 }

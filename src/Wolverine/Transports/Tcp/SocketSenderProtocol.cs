@@ -27,7 +27,7 @@ public class SocketSenderProtocol : ISenderProtocol
             await using var stream = client.GetStream();
             var protocolTimeout = WireProtocol.SendAsync(stream, batch, batch.Data, callback);
             //var protocolTimeout = .TimeoutAfter(5000);
-            await protocolTimeout.ConfigureAwait(false);
+            await protocolTimeout;
 
             if (!protocolTimeout.IsCompleted)
             {

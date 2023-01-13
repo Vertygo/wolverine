@@ -48,8 +48,8 @@ internal class RecoverIncomingMessages : IDurabilityAction
         
         return session.CreateCommand(sql).FetchList(async reader =>
         {
-            var address = new Uri(await reader.GetFieldValueAsync<string>(0, session.Cancellation).ConfigureAwait(false));
-            var count = await reader.GetFieldValueAsync<int>(1, session.Cancellation).ConfigureAwait(false);
+            var address = new Uri(await reader.GetFieldValueAsync<string>(0, session.Cancellation));
+            var count = await reader.GetFieldValueAsync<int>(1, session.Cancellation);
 
             return new IncomingCount(address, count);
         }, session.Cancellation);
@@ -97,7 +97,7 @@ internal class RecoverIncomingMessages : IDurabilityAction
             return false;
         }
 
-        await RecoverMessagesAsync(database, session, count, pageSize, listener!, nodeSettings).ConfigureAwait(false);
+        await RecoverMessagesAsync(database, session, count, pageSize, listener!, nodeSettings);
 
         // Reschedule again if it wasn't able to grab all outstanding envelopes
         return pageSize < count.Count;

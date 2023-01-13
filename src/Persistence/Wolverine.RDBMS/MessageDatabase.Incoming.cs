@@ -59,7 +59,7 @@ public abstract partial class MessageDatabase<T>
         var cmd = builder.Compile();
         try
         {
-            await cmd.ExecuteOnce(_cancellation).ConfigureAwait(false);
+            await cmd.ExecuteOnce(_cancellation);
         }
         catch (Exception e)
         {

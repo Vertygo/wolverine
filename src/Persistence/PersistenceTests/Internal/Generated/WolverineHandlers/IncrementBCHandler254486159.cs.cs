@@ -23,7 +23,7 @@ namespace Internal.Generated.WolverineHandlers
             await using var documentSession = _outboxedSessionFactory.OpenSession(context);
             var eventStore = documentSession.Events;
             // Loading Marten aggregate
-            var eventStream = await eventStore.FetchForWriting<PersistenceTests.Marten.LetterAggregate>(incrementBC.LetterAggregateId, cancellation).ConfigureAwait(false);
+            var eventStream = await eventStore.FetchForWriting<PersistenceTests.Marten.LetterAggregate>(incrementBC.LetterAggregateId, cancellation);
 
             var outgoing1 = letterAggregateHandler.Handle(incrementBC, eventStream.Aggregate);
             if (outgoing1 != null)
@@ -33,7 +33,7 @@ namespace Internal.Generated.WolverineHandlers
 
             }
 
-            await documentSession.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await documentSession.SaveChangesAsync(cancellation);
         }
 
     }

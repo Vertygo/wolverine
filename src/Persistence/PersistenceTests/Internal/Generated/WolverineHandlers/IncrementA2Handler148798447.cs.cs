@@ -25,7 +25,7 @@ namespace Internal.Generated.WolverineHandlers
             await using var documentSession = _outboxedSessionFactory.OpenSession(context);
             var eventStore = documentSession.Events;
             // Loading Marten aggregate
-            var eventStream = await eventStore.FetchForWriting<PersistenceTests.Marten.SelfLetteredAggregate>(incrementA2.SelfLetteredAggregateId, cancellation).ConfigureAwait(false);
+            var eventStream = await eventStore.FetchForWriting<PersistenceTests.Marten.SelfLetteredAggregate>(incrementA2.SelfLetteredAggregateId, cancellation);
 
             if (eventStream.Aggregate == null) throw new Wolverine.Marten.UnknownAggregateException(typeof(PersistenceTests.Marten.SelfLetteredAggregate), incrementA2.SelfLetteredAggregateId);
             var aEvent = eventStream.Aggregate.Handle(incrementA2, _logger);
@@ -36,7 +36,7 @@ namespace Internal.Generated.WolverineHandlers
 
             }
 
-            await documentSession.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await documentSession.SaveChangesAsync(cancellation);
         }
 
     }

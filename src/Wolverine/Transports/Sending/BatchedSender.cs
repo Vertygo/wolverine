@@ -155,7 +155,7 @@ public class BatchedSender : ISender, ISenderRequiresCallback
         }
         catch (Exception? e)
         {
-            await batchSendFailedAsync(batch, e).ConfigureAwait(false);
+            await batchSendFailedAsync(batch, e);
         }
 
         finally
@@ -173,7 +173,7 @@ public class BatchedSender : ISender, ISenderRequiresCallback
 
         try
         {
-            await _callback.MarkProcessingFailureAsync(batch, exception).ConfigureAwait(false);
+            await _callback.MarkProcessingFailureAsync(batch, exception);
         }
         catch (Exception? e)
         {

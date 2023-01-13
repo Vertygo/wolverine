@@ -209,14 +209,14 @@ internal class DurableReceiver : ILocalQueue, IChannelCallback, ISupportNativeSc
         {
             try
             {
-                await action().ConfigureAwait(false);
+                await action();
                 return;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Unexpected failure");
                 i++;
-                await Task.Delay(i * 100).ConfigureAwait(false);
+                await Task.Delay(i * 100);
             }
         }
     }

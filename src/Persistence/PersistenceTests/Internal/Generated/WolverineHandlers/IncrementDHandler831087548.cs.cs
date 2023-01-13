@@ -23,10 +23,10 @@ namespace Internal.Generated.WolverineHandlers
             await using var documentSession = _outboxedSessionFactory.OpenSession(context);
             var eventStore = documentSession.Events;
             // Loading Marten aggregate
-            var eventStream = await eventStore.FetchForWriting<PersistenceTests.Marten.LetterAggregate>(incrementD.LetterAggregateId, cancellation).ConfigureAwait(false);
+            var eventStream = await eventStore.FetchForWriting<PersistenceTests.Marten.LetterAggregate>(incrementD.LetterAggregateId, cancellation);
 
-            await letterAggregateHandler.Handle(incrementD, eventStream).ConfigureAwait(false);
-            await documentSession.SaveChangesAsync(cancellation).ConfigureAwait(false);
+            await letterAggregateHandler.Handle(incrementD, eventStream);
+            await documentSession.SaveChangesAsync(cancellation);
         }
 
     }
