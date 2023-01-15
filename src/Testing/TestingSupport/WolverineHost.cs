@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using JasperFx.TypeDiscovery;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.Threading;
 using Oakton;
 using Oakton.Resources;
 using Wolverine;
@@ -50,11 +51,15 @@ public static class WolverineHost
 
     private static IHost bootstrap(WolverineOptions options)
     {
-        return Host.CreateDefaultBuilder()
-            .UseWolverine(options, (c, o) => { })
-            .UseResourceSetupOnStartup(StartupAction.ResetState)
-            //.ConfigureLogging(x => x.ClearProviders())
-            .Start();
+        JoinableTaskFactory joinableTaskFactory = new JoinableTaskFactory(new JoinableTaskContext());
+        return joinableTaskFactory.Run(async () =>
+        {
+            return await Host.CreateDefaultBuilder()
+                .UseWolverine(options, (c, o) => { })
+                .UseResourceSetupOnStartup(StartupAction.ResetState)
+                //.ConfigureLogging(x => x.ClearProviders())
+                .StartAsync();
+        });
     }
 
 
