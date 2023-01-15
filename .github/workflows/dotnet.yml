@@ -31,11 +31,11 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
-#    - name: Start SSH session
-#      uses: luchihoratiu/debug-via-ssh@main
-#      with:
-#        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-#        SSH_PASS: ${{ secrets.SSH_PASS }}
+    - name: Start SSH session
+      uses: luchihoratiu/debug-via-ssh@main
+      with:
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+        SSH_PASS: ${{ secrets.SSH_PASS }}
         
     - name: Test
       run: dotnet run -p build/build.csproj -- full
