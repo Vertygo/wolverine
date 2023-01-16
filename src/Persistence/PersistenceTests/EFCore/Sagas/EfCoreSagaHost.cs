@@ -21,9 +21,9 @@ public class EfCoreSagaHost : ISagaHost
 {
     private IHost _host;
 
-    public IHost BuildHost<TSaga>()
+    public async Task<IHost> BuildHost<TSaga>()
     {
-        _host = WolverineHost.For(opts =>
+        _host = await WolverineHost.For(opts =>
         {
             opts.Handlers.DisableConventionalDiscovery().IncludeType<TSaga>();
 

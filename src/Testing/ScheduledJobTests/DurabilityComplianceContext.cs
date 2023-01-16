@@ -51,7 +51,7 @@ public abstract class DurabilityComplianceContext<TTriggerHandler, TItemCreatedH
 
         configureSender(senderRegistry);
 
-        theSender = WolverineHost.For(senderRegistry);
+        theSender = await WolverineHost.For(senderRegistry);
 
 
         var receiverRegistry = new WolverineOptions();
@@ -67,7 +67,7 @@ public abstract class DurabilityComplianceContext<TTriggerHandler, TItemCreatedH
         configureReceiver(receiverRegistry);
 
 
-        theReceiver = WolverineHost.For(receiverRegistry);
+        theReceiver = await WolverineHost.For(receiverRegistry);
 
         await theSender.ResetResourceState();
         await theReceiver.ResetResourceState();

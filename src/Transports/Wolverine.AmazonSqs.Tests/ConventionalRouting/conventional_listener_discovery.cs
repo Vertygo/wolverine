@@ -9,9 +9,9 @@ namespace Wolverine.AmazonSqs.Tests.ConventionalRouting;
 public class conventional_listener_discovery : ConventionalRoutingContext
 {
     [Fact]
-    public void disable_sender_with_lambda()
+    public async Task disable_sender_with_lambda()
     {
-        ConfigureConventions(c => c.QueueNameForSender(t =>
+        await ConfigureConventions(c => c.QueueNameForSender(t =>
         {
             if (t == typeof(PublishedMessage))
             {
@@ -25,9 +25,9 @@ public class conventional_listener_discovery : ConventionalRoutingContext
     }
 
     [Fact]
-    public void exclude_types()
+    public async Task exclude_types()
     {
-        ConfigureConventions(c => { c.ExcludeTypes(t => t == typeof(PublishedMessage)); });
+        await ConfigureConventions(c => { c.ExcludeTypes(t => t == typeof(PublishedMessage)); });
 
         AssertNoRoutes<PublishedMessage>();
 
@@ -40,9 +40,9 @@ public class conventional_listener_discovery : ConventionalRoutingContext
     }
 
     [Fact]
-    public void include_types()
+    public async Task include_types()
     {
-        ConfigureConventions(c => { c.IncludeTypes(t => t == typeof(PublishedMessage)); });
+        await ConfigureConventions(c => { c.IncludeTypes(t => t == typeof(PublishedMessage)); });
 
         AssertNoRoutes<Message1>();
 
@@ -57,9 +57,9 @@ public class conventional_listener_discovery : ConventionalRoutingContext
     }
 
     [Fact]
-    public void configure_sender_overrides()
+    public async Task configure_sender_overrides()
     {
-        ConfigureConventions(c => c.ConfigureSending((c, _) => c.AddOutgoingRule(new FakeEnvelopeRule())));
+        await ConfigureConventions(c => c.ConfigureSending((c, _) => c.AddOutgoingRule(new FakeEnvelopeRule())));
 
         var route = PublishingRoutesFor<PublishedMessage>().Single().Sender.Endpoint
             .ShouldBeOfType<AmazonSqsQueue>();
@@ -68,9 +68,9 @@ public class conventional_listener_discovery : ConventionalRoutingContext
     }
 
     [Fact]
-    public void disable_listener_by_lambda()
+    public async Task disable_listener_by_lambda()
     {
-        ConfigureConventions(c => c.QueueNameForListener(t =>
+        await ConfigureConventions(c => c.QueueNameForListener(t =>
         {
             if (t == typeof(RoutedMessage))
             {
@@ -89,9 +89,9 @@ public class conventional_listener_discovery : ConventionalRoutingContext
     }
 
     [Fact]
-    public void configure_listener()
+    public async Task configure_listener()
     {
-        ConfigureConventions(c => c.ConfigureListeners((x, _) => { x.UseDurableInbox(); }));
+        await ConfigureConventions(c => c.ConfigureListeners((x, _) => { x.UseDurableInbox(); }));
 
         var endpoint = theRuntime.Endpoints.EndpointFor("sqs://routed".ToUri())
             .ShouldBeOfType<AmazonSqsQueue>();

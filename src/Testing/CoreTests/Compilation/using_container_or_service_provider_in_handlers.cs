@@ -24,7 +24,7 @@ public class using_container_or_service_provider_in_handlers : CompilationContex
     [Fact]
     public async Task icontainer_as_constructor_dependency()
     {
-        var handler = HandlerFor<CSP1>();
+        var handler = await HandlerFor<CSP1>();
         _output.WriteLine(handler.Chain.SourceCode);
 
         await Execute(new CSP1());
@@ -33,7 +33,7 @@ public class using_container_or_service_provider_in_handlers : CompilationContex
     [Fact]
     public async Task icontainer_as_method_parameter()
     {
-        var handler = HandlerFor<CSP2>();
+        var handler =await  HandlerFor<CSP2>();
         _output.WriteLine(handler.Chain.SourceCode);
 
         await Execute(new CSP2());
@@ -42,7 +42,7 @@ public class using_container_or_service_provider_in_handlers : CompilationContex
     [Fact]
     public async Task IServiceProvider_as_constructor_dependency()
     {
-        var handler = HandlerFor<CSP3>();
+        var handler =await  HandlerFor<CSP3>();
         _output.WriteLine(handler.Chain.SourceCode);
 
         await Execute(new CSP3());
@@ -51,7 +51,7 @@ public class using_container_or_service_provider_in_handlers : CompilationContex
     [Fact]
     public async Task IServiceProvider_as_method_parameter()
     {
-        var handler = HandlerFor<CSP4>();
+        var handler = await HandlerFor<CSP4>();
         _output.WriteLine(handler.Chain.SourceCode);
 
         await Execute(new CSP4());

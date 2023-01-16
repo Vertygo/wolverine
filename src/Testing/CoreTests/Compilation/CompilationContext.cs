@@ -27,17 +27,17 @@ public abstract class CompilationContext : IDisposable
         _host?.Dispose();
     }
 
-    protected void AllHandlersCompileSuccessfully()
+    protected async Task AllHandlersCompileSuccessfully()
     {
-        using var host = WolverineHost.For(theOptions);
+        using var host = await WolverineHost.For(theOptions);
         host.Get<HandlerGraph>().Chains.Length.ShouldBeGreaterThan(0);
     }
 
-    public MessageHandler HandlerFor<TMessage>()
+    public async Task<MessageHandler> HandlerFor<TMessage>()
     {
         if (_host == null)
         {
-            _host = WolverineHost.For(theOptions);
+            _host = await WolverineHost.For(theOptions);
         }
 
 
@@ -46,7 +46,7 @@ public abstract class CompilationContext : IDisposable
 
     public async Task<IMessageContext> Execute<TMessage>(TMessage message)
     {
-        var handler = HandlerFor<TMessage>();
+        var handler = await HandlerFor<TMessage>();
         theEnvelope = new Envelope(message);
         var context = new MessageContext(_host.Get<IWolverineRuntime>());
         context.ReadEnvelope(theEnvelope, InvocationCallback.Instance);
@@ -57,8 +57,8 @@ public abstract class CompilationContext : IDisposable
     }
 
     [Fact]
-    public void can_compile_all()
+    public async Task can_compile_all()
     {
-        AllHandlersCompileSuccessfully();
+        await AllHandlersCompileSuccessfully();
     }
 }

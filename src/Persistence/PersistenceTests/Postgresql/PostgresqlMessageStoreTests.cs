@@ -30,18 +30,23 @@ namespace PersistenceTests.Postgresql;
 
 public class PostgresqlMessageStoreTests : PostgresqlContext, IDisposable, IAsyncLifetime
 {
-    public IHost theHost = WolverineHost.For(opts =>
-    {
-        opts.Services.AddMarten(x =>
-        {
-            x.Connection(Servers.PostgresConnectionString);
-            x.DatabaseSchemaName = "receiver";
-        }).IntegrateWithWolverine();
-
-        opts.ListenAtPort(2345).UseDurableInbox();
-    });
+    public IHost theHost;
 
     private IMessageDatabase thePersistence;
+
+    public PostgresqlMessageStoreTests()
+    {
+        theHost =  WolverineHost.For(opts =>
+        {
+            opts.Services.AddMarten(x =>
+            {
+                x.Connection(Servers.PostgresConnectionString);
+                x.DatabaseSchemaName = "receiver";
+            }).IntegrateWithWolverine();
+
+            opts.ListenAtPort(2345).UseDurableInbox();
+        }).GetAwaiter().GetResult();
+    }
 
     public async Task InitializeAsync()
     {

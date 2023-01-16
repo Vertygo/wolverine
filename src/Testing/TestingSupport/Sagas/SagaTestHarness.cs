@@ -25,9 +25,9 @@ public class SagaTestHarness<T> : IDisposable
     }
 
 
-    protected void withApplication()
+    protected async Task withApplication()
     {
-        _host = SagaHost.BuildHost<T>();
+        _host = await SagaHost.BuildHost<T>();
     }
 
     protected string codeFor<T>()

@@ -26,9 +26,9 @@ public class message_timeout_mechanics
     }
 
     [Fact]
-    public void set_timeout_on_handler_attribute()
+    public async Task set_timeout_on_handler_attribute()
     {
-        using var host = WolverineHost.Basic();
+        using var host = await WolverineHost.Basic();
         var handlers = host.Services.GetRequiredService<HandlerGraph>();
         var chain = handlers.ChainFor(typeof(PotentiallySlowMessage));
         chain.ExecutionTimeoutInSeconds.ShouldBe(1); // coming from the attribute
@@ -39,7 +39,7 @@ public class message_timeout_mechanics
     {
         PotentiallySlowMessageHandler.DidTimeout = false; // start clean
 
-        using var host = WolverineHost.Basic();
+        using var host = await WolverineHost.Basic();
 
         await host.TrackActivity().PublishMessageAndWaitAsync(new DurationMessage { DurationInMilliseconds = 50 });
 
@@ -51,7 +51,7 @@ public class message_timeout_mechanics
     {
         PotentiallySlowMessageHandler.DidTimeout = false; // start clean
 
-        using var host = WolverineHost.For(opts => { opts.DefaultExecutionTimeout = 50.Milliseconds(); });
+        using var host = await WolverineHost.For(opts => { opts.DefaultExecutionTimeout = 50.Milliseconds(); });
 
         var session = await host
             .TrackActivity()
@@ -67,7 +67,7 @@ public class message_timeout_mechanics
     {
         PotentiallySlowMessageHandler.DidTimeout = false; // start clean
 
-        using var host = WolverineHost.Basic();
+        using var host = await WolverineHost.Basic();
 
         var session = await host
             .TrackActivity()

@@ -16,9 +16,9 @@ public class local_integration_specs : IntegrationContext
     {
     }
 
-    private void configure()
+    private async Task configure()
     {
-        with(opts =>
+        await with(opts =>
         {
             opts.Publish(x => x.Message<Message1>()
                 .ToLocalQueue("incoming"));
@@ -38,7 +38,7 @@ public class local_integration_specs : IntegrationContext
     [Fact]
     public async Task send_a_message_and_get_the_response()
     {
-        configure();
+        await configure();
 
         var message1 = new Message1();
         var session = await Host.SendMessageAndWaitAsync(message1, timeoutInMilliseconds: 15000);
@@ -49,9 +49,9 @@ public class local_integration_specs : IntegrationContext
     }
 
     [Fact]
-    public void no_circuit_breaker()
+    public async Task no_circuit_breaker()
     {
-        with(opts => { opts.LocalQueue("foo").UseDurableInbox(); });
+        await with(opts => { opts.LocalQueue("foo").UseDurableInbox(); });
 
         var runtime = Host.GetRuntime();
         var agent = runtime
@@ -65,9 +65,9 @@ public class local_integration_specs : IntegrationContext
     }
 
     [Fact]
-    public void build_isolated_watched_handler_pipeline_when_durable_and_circuit_breaker()
+    public async Task build_isolated_watched_handler_pipeline_when_durable_and_circuit_breaker()
     {
-        with(opts =>
+        await with(opts =>
         {
             opts.LocalQueue("foo")
                 .UseDurableInbox()

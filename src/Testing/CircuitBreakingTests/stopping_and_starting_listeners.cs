@@ -33,7 +33,7 @@ public class stopping_and_starting_listeners : IDisposable
 
             opts.Handlers.OnException<DivideByZeroException>()
                 .Requeue().AndPauseProcessing(5.Seconds());
-        });
+        }).GetAwaiter().GetResult();
     }
 
     public void Dispose()
@@ -137,7 +137,7 @@ public class stopping_and_starting_listeners : IDisposable
     [Fact]
     public async Task pause_listener_on_matching_error_condition()
     {
-        using var sender = WolverineHost.For(opts => { opts.PublishAllMessages().ToPort(_port1).Named("one"); });
+        using var sender = await WolverineHost.For(opts => { opts.PublishAllMessages().ToPort(_port1).Named("one"); });
 
         var runtime = theListener.GetRuntime();
 

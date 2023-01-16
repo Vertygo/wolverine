@@ -11,12 +11,12 @@ public class InlineRabbitMqTransportFixture : TransportComplianceFixture, IAsync
     {
     }
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
         var queueName = RabbitTesting.NextQueueName();
         OutboundAddress = $"rabbitmq://queue/{queueName}".ToUri();
 
-        SenderIs(opts =>
+        await SenderIs(opts =>
         {
             var listener = RabbitTesting.NextQueueName();
 
@@ -27,14 +27,12 @@ public class InlineRabbitMqTransportFixture : TransportComplianceFixture, IAsync
             opts.UseRabbitMq().AutoProvision().AutoPurgeOnStartup();
         });
 
-        ReceiverIs(opts =>
+        await ReceiverIs(opts =>
         {
             opts.UseRabbitMq().AutoProvision().AutoPurgeOnStartup();
 
             opts.ListenToRabbitQueue(queueName).ProcessInline();
         });
-        
-        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

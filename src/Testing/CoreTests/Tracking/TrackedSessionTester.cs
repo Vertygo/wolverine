@@ -17,8 +17,7 @@ public class TrackedSessionTester : IDisposable
 
     public TrackedSessionTester()
     {
-        _host = WolverineHost.Basic();
-
+        _host = WolverineHost.Basic().GetAwaiter().GetResult();
         theSession = new TrackedSession(_host);
     }
 

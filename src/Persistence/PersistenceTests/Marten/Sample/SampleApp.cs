@@ -31,7 +31,7 @@ public class MessageInvocationTests : PostgresqlContext, IDisposable
 
             opts.Services.AddMarten(Servers.PostgresConnectionString)
                 .IntegrateWithWolverine();
-        });
+        }).GetAwaiter().GetResult();
 
         theHost.Get<IDocumentStore>().Advanced.Clean.CompletelyRemoveAll();
     }

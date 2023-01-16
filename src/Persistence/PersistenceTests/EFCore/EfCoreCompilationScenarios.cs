@@ -13,7 +13,7 @@ public class EfCoreCompilationScenarios
     [Fact]
     public async Task ef_context_is_scoped_and_options_are_scoped()
     {
-        using var host = WolverineHost.For(opts =>
+        using var host = await WolverineHost.For(opts =>
         {
             // Default of both is scoped
             opts.Services.AddDbContext<SampleDbContext>();
@@ -25,7 +25,7 @@ public class EfCoreCompilationScenarios
     [Fact]
     public async Task ef_context_is_scoped_and_options_are_singleton()
     {
-        using var host = WolverineHost.For(opts =>
+        using var host = await WolverineHost.For(opts =>
         {
             // Default of both is scoped
             opts.Services.AddDbContext<SampleDbContext>(optionsLifetime: ServiceLifetime.Singleton);
@@ -38,7 +38,7 @@ public class EfCoreCompilationScenarios
     [Fact]
     public async Task ef_context_is_singleton_and_options_are_singleton()
     {
-        using var host = WolverineHost.For(opts =>
+        using var host = await WolverineHost.For(opts =>
         {
             // Default of both is scoped
             opts.Services.AddDbContext<SampleDbContext>(ServiceLifetime.Singleton, ServiceLifetime.Singleton);

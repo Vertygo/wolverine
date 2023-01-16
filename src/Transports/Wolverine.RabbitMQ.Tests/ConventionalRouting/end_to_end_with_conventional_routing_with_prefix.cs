@@ -17,22 +17,21 @@ public class end_to_end_with_conventional_routing_with_prefix : IDisposable
 
     public end_to_end_with_conventional_routing_with_prefix()
     {
-        _sender = WolverineHost.For(opts =>
+        _receiver =  WolverineHost.For(opts =>
+        {
+            opts.UseRabbitMq()
+                .PrefixIdentifiers("shazaam")
+                .UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
+            opts.ServiceName = "Receiver";
+        }).GetAwaiter().GetResult();
+        _sender =  WolverineHost.For(opts =>
         {
             opts.UseRabbitMq()
                 .PrefixIdentifiers("shazaam")
                 .UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
             opts.Handlers.DisableConventionalDiscovery();
             opts.ServiceName = "Sender";
-        });
-
-        _receiver = WolverineHost.For(opts =>
-        {
-            opts.UseRabbitMq()
-                .PrefixIdentifiers("shazaam")
-                .UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
-            opts.ServiceName = "Receiver";
-        });
+        }).GetAwaiter().GetResult();
     }
 
     public void Dispose()

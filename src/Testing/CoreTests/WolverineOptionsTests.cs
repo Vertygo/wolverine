@@ -69,14 +69,14 @@ public class WolverineOptionsTests
     }
 
     [Fact]
-    public void sets_up_the_container_with_services()
+    public async Task sets_up_the_container_with_services()
     {
         var registry = new WolverineOptions();
         registry.Handlers.DisableConventionalDiscovery();
         registry.Services.For<IFoo>().Use<Foo>();
         registry.Services.AddTransient<IFakeStore, FakeStore>();
 
-        using (var runtime = WolverineHost.For(registry))
+        using (var runtime = await WolverineHost.For(registry))
         {
             runtime.Get<IContainer>().DefaultRegistrationIs<IFoo, Foo>();
         }

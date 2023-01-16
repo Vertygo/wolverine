@@ -24,8 +24,8 @@ public class when_determining_if_the_session_is_done : IDisposable
 
     public when_determining_if_the_session_is_done()
     {
-        _host = WolverineHost.Basic();
-        theSession = new TrackedSession(_host);
+        _host = WolverineHost.Basic().GetAwaiter().GetResult();
+        theSession= new TrackedSession(_host) ;
     }
 
     public void Dispose()

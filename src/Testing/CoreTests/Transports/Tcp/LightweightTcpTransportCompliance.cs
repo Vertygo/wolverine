@@ -13,13 +13,11 @@ public class LightweightTcpFixture : TransportComplianceFixture, IAsyncLifetime
     {
     }
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
-        SenderIs(opts => { opts.ListenAtPort(PortFinder.GetAvailablePort()); });
+        await SenderIs(opts => { opts.ListenAtPort(PortFinder.GetAvailablePort()); });
 
-        ReceiverIs(opts => { opts.ListenAtPort(OutboundAddress.Port); });
-        
-        return Task.CompletedTask;
+        await ReceiverIs(opts => { opts.ListenAtPort(OutboundAddress.Port); });
     }
 
     public Task DisposeAsync()

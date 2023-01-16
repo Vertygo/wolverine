@@ -29,7 +29,7 @@ public class ErrorHandlingContext
 
     protected async Task<EnvelopeRecord> afterProcessingIsComplete()
     {
-        using var host = WolverineHost.For(theOptions);
+        using var host = await WolverineHost.For(theOptions);
         _session = await host
             .TrackActivity()
             .DoNotAssertOnExceptionsDetected()
@@ -42,7 +42,7 @@ public class ErrorHandlingContext
 
     protected async Task shouldSucceedOnAttempt(int attempt)
     {
-        using var host = WolverineHost.For(theOptions);
+        using var host = await WolverineHost.For(theOptions);
         var session = await host
             .TrackActivity()
             .DoNotAssertOnExceptionsDetected()
@@ -79,7 +79,7 @@ public class ErrorHandlingContext
 
     protected async Task shouldMoveToErrorQueueOnAttempt(int attempt)
     {
-        using var host = WolverineHost.For(theOptions);
+        using var host = await WolverineHost.For(theOptions);
         var session = await host
             .TrackActivity()
             .DoNotAssertOnExceptionsDetected()

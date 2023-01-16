@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shouldly;
@@ -20,7 +21,7 @@ public abstract class ConventionalRoutingContext : IDisposable
             if (_host == null)
             {
                 _host = WolverineHost.For(opts =>
-                    opts.UseRabbitMq().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup());
+                    opts.UseRabbitMq().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup()).GetAwaiter().GetResult();
             }
 
             return _host.Services.GetRequiredService<IWolverineRuntime>();
@@ -33,7 +34,7 @@ public abstract class ConventionalRoutingContext : IDisposable
         {
             if (_host == null)
             {
-                _host = WolverineHost.For(opts => opts.UseRabbitMq().UseConventionalRouting());
+                _host = WolverineHost.For(opts => opts.UseRabbitMq().UseConventionalRouting()).GetAwaiter().GetResult();
             }
 
             var options = _host.Services.GetRequiredService<IWolverineRuntime>().Options;
@@ -47,9 +48,9 @@ public abstract class ConventionalRoutingContext : IDisposable
         _host?.Dispose();
     }
 
-    internal void ConfigureConventions(Action<RabbitMqMessageRoutingConvention> configure)
+    internal async Task ConfigureConventions(Action<RabbitMqMessageRoutingConvention> configure)
     {
-        _host = WolverineHost.For(opts =>
+        _host = await WolverineHost.For(opts =>
         {
             opts.UseRabbitMq().UseConventionalRouting(configure).AutoProvision().AutoPurgeOnStartup();
         });

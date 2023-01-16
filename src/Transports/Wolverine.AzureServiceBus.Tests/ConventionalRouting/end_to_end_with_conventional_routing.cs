@@ -17,18 +17,17 @@ public class end_to_end_with_conventional_routing : IDisposable
 
     public end_to_end_with_conventional_routing()
     {
-        _sender = WolverineHost.For(opts =>
+        _receiver =  WolverineHost.For(opts =>
+        {
+            opts.UseAzureServiceBusTesting().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
+            opts.ServiceName = "Receiver";
+        }).GetAwaiter().GetResult();
+        _sender =  WolverineHost.For(opts =>
         {
             opts.UseAzureServiceBusTesting().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
             opts.Handlers.DisableConventionalDiscovery();
             opts.ServiceName = "Sender";
-        });
-
-        _receiver = WolverineHost.For(opts =>
-        {
-            opts.UseAzureServiceBusTesting().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
-            opts.ServiceName = "Receiver";
-        });
+        }).GetAwaiter().GetResult();
     }
 
     public void Dispose()

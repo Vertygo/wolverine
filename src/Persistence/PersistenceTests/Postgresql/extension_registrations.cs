@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using System.Threading.Tasks;
 using IntegrationTests;
 using Lamar;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,9 +17,9 @@ namespace PersistenceTests.Postgresql;
 public class extension_registrations : PostgresqlContext
 {
     [Fact]
-    public void registrations()
+    public async Task registrations()
     {
-        using var runtime = WolverineHost.For(x =>
+        using var runtime = await WolverineHost.For(x =>
             x.PersistMessagesWithPostgresql(Servers.PostgresConnectionString));
 
         var container = runtime.Get<IContainer>();

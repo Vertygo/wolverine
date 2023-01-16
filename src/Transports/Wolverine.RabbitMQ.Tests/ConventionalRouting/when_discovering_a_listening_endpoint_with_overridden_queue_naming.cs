@@ -14,7 +14,7 @@ public class when_discovering_a_listening_endpoint_with_overridden_queue_naming 
 
     public when_discovering_a_listening_endpoint_with_overridden_queue_naming()
     {
-        ConfigureConventions(c => c.QueueNameForListener(t => t.ToMessageTypeName() + "2"));
+        ConfigureConventions(c => c.QueueNameForListener(t => t.ToMessageTypeName() + "2")).GetAwaiter().GetResult();
 
         theEndpoint = theRuntime.Endpoints.EndpointFor(theExpectedUri).ShouldBeOfType<RabbitMqQueue>();
     }

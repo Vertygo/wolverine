@@ -24,10 +24,15 @@ namespace PersistenceTests.SqlServer.Persistence;
 
 public class SqlServerMessageStoreTests : SqlServerBackedListenerContext, IDisposable
 {
-    public IHost theHost = WolverineHost.For(opts =>
+    public IHost theHost;
+
+    public SqlServerMessageStoreTests()
     {
-        opts.PersistMessagesWithSqlServer(Servers.SqlServerConnectionString, "receiver");
-    });
+        theHost = WolverineHost.For(opts =>
+        {
+            opts.PersistMessagesWithSqlServer(Servers.SqlServerConnectionString, "receiver");
+        }).GetAwaiter().GetResult();
+    }
 
     public void Dispose()
     {

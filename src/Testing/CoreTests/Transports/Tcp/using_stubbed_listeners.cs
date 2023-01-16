@@ -14,7 +14,7 @@ public class using_stubbed_listeners
     [Fact]
     public async Task track_outgoing_to_tcp_when_stubbed()
     {
-        using var host = WolverineHost.For(options =>
+        using var host = await WolverineHost.For(options =>
         {
             options.PublishAllMessages().ToPort(7777);
             options.StubAllExternalTransports();

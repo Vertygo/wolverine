@@ -19,7 +19,7 @@ public class discarding_expired_envelopes
     {
         var logger = Substitute.For<IMessageLogger>();
 
-        using var runtime = WolverineHost.For(x =>
+        using var runtime = await WolverineHost.For(x =>
         {
             x.Handlers.DisableConventionalDiscovery();
             x.Services.AddSingleton(logger);

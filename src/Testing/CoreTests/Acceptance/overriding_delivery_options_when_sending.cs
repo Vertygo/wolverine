@@ -47,9 +47,9 @@ public class overriding_delivery_options_when_sending : SendingContext
     }
 
     [Fact]
-    public void message_type_rules_override_endpoint_rules()
+    public async Task message_type_rules_override_endpoint_rules()
     {
-        SenderOptions(opts =>
+        await SenderOptions(opts =>
         {
             opts.PublishMessage<MessageWithSpecialAttribute>()
                 .ToPort(ReceiverPort)
@@ -63,9 +63,9 @@ public class overriding_delivery_options_when_sending : SendingContext
     }
 
     [Fact]
-    public void delivery_options_trumps_all_other_rules()
+    public async Task delivery_options_trumps_all_other_rules()
     {
-        SenderOptions(opts =>
+        await SenderOptions(opts =>
         {
             opts.PublishMessage<MessageWithSpecialAttribute>()
                 .ToPort(ReceiverPort)

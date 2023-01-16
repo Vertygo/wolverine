@@ -22,9 +22,9 @@ public static class WolverineHost
     ///     using all the default Wolverine configurations
     /// </summary>
     /// <returns></returns>
-    public static IHost Basic()
+    public static async Task<IHost> Basic()
     {
-        return bootstrap(new WolverineOptions());
+        return await bootstrap(new WolverineOptions());
     }
 
     /// <summary>
@@ -32,9 +32,9 @@ public static class WolverineHost
     /// </summary>
     /// <param name="options"></param>
     /// <returns></returns>
-    public static IHost For(WolverineOptions options)
+    public static async Task<IHost> For(WolverineOptions options)
     {
-        return bootstrap(options);
+        return await bootstrap(options);
     }
 
     /// <summary>
@@ -42,24 +42,20 @@ public static class WolverineHost
     /// </summary>
     /// <param name="configure"></param>
     /// <returns></returns>
-    public static IHost For(Action<WolverineOptions> configure)
+    public static Task<IHost> For(Action<WolverineOptions> configure)
     {
         var options = new WolverineOptions();
         configure(options);
         return bootstrap(options);
     }
 
-    private static IHost bootstrap(WolverineOptions options)
+    private static async Task<IHost> bootstrap(WolverineOptions options)
     {
-        JoinableTaskFactory joinableTaskFactory = new JoinableTaskFactory(new JoinableTaskContext());
-        return joinableTaskFactory.Run(async () =>
-        {
             return await Host.CreateDefaultBuilder()
                 .UseWolverine(options, (c, o) => { })
                 .UseResourceSetupOnStartup(StartupAction.ResetState)
                 //.ConfigureLogging(x => x.ClearProviders())
                 .StartAsync();
-        });
     }
 
 

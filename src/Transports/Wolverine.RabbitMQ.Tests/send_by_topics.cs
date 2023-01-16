@@ -21,9 +21,21 @@ public class send_by_topics : IDisposable
 
     public send_by_topics()
     {
-        #region sample_binding_topics_and_topic_patterns_to_queues
-
-        theSender = Host.CreateDefaultBuilder()
+        theFirstReceiver =  WolverineHost.For(opts =>
+        {
+            opts.ServiceName = "First";
+            opts.ListenToRabbitQueue("green");
+            opts.UseRabbitMq();
+        }).GetAwaiter().GetResult();
+        
+        theSecondReceiver =  WolverineHost.For(opts =>
+        {
+            opts.ServiceName = "Second";
+            opts.ListenToRabbitQueue("blue");
+            opts.UseRabbitMq();
+        }).GetAwaiter().GetResult();
+        
+        theSender =  Host.CreateDefaultBuilder()
             .UseWolverine(opts =>
             {
                 opts.UseRabbitMq().AutoProvision();
@@ -33,30 +45,19 @@ public class send_by_topics : IDisposable
                     exchange.BindTopic("color.blue").ToQueue("blue");
                     exchange.BindTopic("color.*").ToQueue("all");
                 });
-            }).Start();
-
-        #endregion
-
-        theFirstReceiver = WolverineHost.For(opts =>
-        {
-            opts.ServiceName = "First";
-            opts.ListenToRabbitQueue("green");
-            opts.UseRabbitMq();
-        });
-
-        theSecondReceiver = WolverineHost.For(opts =>
-        {
-            opts.ServiceName = "Second";
-            opts.ListenToRabbitQueue("blue");
-            opts.UseRabbitMq();
-        });
-
-        theThirdReceiver = WolverineHost.For(opts =>
+            }).StartAsync().GetAwaiter().GetResult();
+        
+        theThirdReceiver= WolverineHost.For(opts =>
         {
             opts.ServiceName = "Third";
             opts.ListenToRabbitQueue("all");
             opts.UseRabbitMq();
-        });
+        }).GetAwaiter().GetResult();
+
+        #region sample_binding_topics_and_topic_patterns_to_queues
+
+
+        #endregion
     }
 
     public void Dispose()

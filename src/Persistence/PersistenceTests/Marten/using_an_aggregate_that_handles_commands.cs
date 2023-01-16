@@ -35,7 +35,7 @@ public class using_an_aggregate_that_handles_commands : PostgresqlContext, IDisp
             }).IntegrateWithWolverine().ApplyAllDatabaseChangesOnStartup();
 
             x.Node.CodeGeneration.TypeLoadMode = TypeLoadMode.Auto;
-        });
+        }).GetAwaiter().GetResult();
 
         theStore = theHost.Services.GetRequiredService<IDocumentStore>();
     }

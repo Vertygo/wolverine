@@ -17,7 +17,7 @@ public abstract class ConventionalRoutingContext : IDisposable
         get
         {
             _host ??= WolverineHost.For(opts =>
-                opts.UseAzureServiceBusTesting().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup());
+                opts.UseAzureServiceBusTesting().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup()).GetAwaiter().GetResult();
 
             return _host.Services.GetRequiredService<IWolverineRuntime>();
         }

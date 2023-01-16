@@ -23,7 +23,7 @@ public class durability_with_local : PostgresqlContext
     [Fact]
     public async Task should_recover_persisted_messages()
     {
-        using (var host1 = WolverineHost.For(opts => opts.ConfigureDurableSender(true, true)))
+        using (var host1 = await WolverineHost.For(opts => opts.ConfigureDurableSender(true, true)))
         {
             await host1.SendAsync(new ReceivedMessage());
 

@@ -40,7 +40,7 @@ public class MessageContextTests
     [Fact]
     public async Task clear_all_cleans_out_outstanding_messages()
     {
-        using var host = WolverineHost.For(opts =>
+        using var host = await WolverineHost.For(opts =>
         {
             opts.PublishAllMessages().ToPort(PortFinder.GetAvailablePort());
         });

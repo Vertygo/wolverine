@@ -34,7 +34,7 @@ public abstract class SendingContext : IAsyncDisposable
                 {
                     opts.PublishAllMessages().ToPort(ReceiverPort);
                     opts.ListenAtPort(_senderPort);
-                });
+                }).GetAwaiter().GetResult();
             }
 
             return _sender;
@@ -47,7 +47,7 @@ public abstract class SendingContext : IAsyncDisposable
         {
             if (_receiver == null)
             {
-                _receiver = WolverineHost.For(opts => opts.ListenAtPort(ReceiverPort));
+                _receiver = WolverineHost.For(opts => opts.ListenAtPort(ReceiverPort)).GetAwaiter().GetResult();
             }
 
             return _receiver;
@@ -69,9 +69,9 @@ public abstract class SendingContext : IAsyncDisposable
         }
     }
 
-    internal void SenderOptions(Action<WolverineOptions> configure)
+    internal async Task SenderOptions(Action<WolverineOptions> configure)
     {
-        _sender = WolverineHost.For(opts =>
+        _sender = await WolverineHost.For(opts =>
         {
             configure(opts);
             opts.ListenAtPort(_senderPort);

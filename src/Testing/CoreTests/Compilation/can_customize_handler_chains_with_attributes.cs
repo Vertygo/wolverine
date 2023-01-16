@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using JasperFx.CodeGeneration;
 using JasperFx.CodeGeneration.Frames;
 using TestingSupport;
@@ -11,9 +12,9 @@ namespace CoreTests.Compilation;
 
 public class can_customize_handler_chains_with_attributes
 {
-    private void forMessage<T>(Action<HandlerChain> action)
+    private async Task forMessage<T>(Action<HandlerChain> action)
     {
-        using (var runtime = WolverineHost.For(opts =>
+        using (var runtime = await WolverineHost.For(opts =>
                {
                    opts.Handlers.DisableConventionalDiscovery();
                    opts.Handlers.IncludeType<FakeHandler1>();
@@ -27,9 +28,9 @@ public class can_customize_handler_chains_with_attributes
 
 
     [Fact]
-    public void apply_attribute_on_class()
+    public async Task apply_attribute_on_class()
     {
-        forMessage<Message2>(chain => chain.SourceCode.ShouldContain("// fake frame here"));
+        await forMessage<Message2>(chain => chain.SourceCode.ShouldContain("// fake frame here"));
     }
 
     [Fact]

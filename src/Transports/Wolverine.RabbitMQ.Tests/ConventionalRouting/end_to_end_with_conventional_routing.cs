@@ -12,22 +12,24 @@ namespace Wolverine.RabbitMQ.Tests.ConventionalRouting;
 public class end_to_end_with_conventional_routing : IDisposable
 {
     private readonly IHost _receiver;
+
     private readonly IHost _sender;
 
     public end_to_end_with_conventional_routing()
     {
-        _sender = WolverineHost.For(opts =>
+        
+        _sender=  WolverineHost.For(opts =>
         {
             opts.UseRabbitMq().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
             opts.Handlers.DisableConventionalDiscovery();
             opts.ServiceName = "Sender";
-        });
-
+        }).GetAwaiter().GetResult();
+        
         _receiver = WolverineHost.For(opts =>
         {
             opts.UseRabbitMq().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
             opts.ServiceName = "Receiver";
-        });
+        }).GetAwaiter().GetResult();
     }
 
     public void Dispose()

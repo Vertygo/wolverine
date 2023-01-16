@@ -32,8 +32,7 @@ public class MartenBackedMessagePersistenceTests : PostgresqlContext, IDisposabl
         {
             opts.Services.AddMarten(x => { x.Connection(Servers.PostgresConnectionString); })
                 .IntegrateWithWolverine();
-        });
-
+        }).GetAwaiter().GetResult();
 
         theEnvelope = ObjectMother.Envelope();
         theEnvelope.Message = new Message1();

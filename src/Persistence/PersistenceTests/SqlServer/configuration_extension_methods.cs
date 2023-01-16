@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using IntegrationTests;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,9 +43,9 @@ public class configuration_extension_methods : SqlServerContext
 
 
     [Fact]
-    public void bootstrap_with_connection_string()
+    public async Task bootstrap_with_connection_string()
     {
-        using var runtime = WolverineHost.For(x =>
+        using var runtime = await WolverineHost.For(x =>
             x.PersistMessagesWithSqlServer(Servers.SqlServerConnectionString));
         runtime.Get<SqlServerSettings>()
             .ConnectionString.ShouldBe(Servers.SqlServerConnectionString);

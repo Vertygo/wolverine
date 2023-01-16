@@ -11,7 +11,7 @@ public class find_handlers_with_the_default_handler_discovery : IntegrationConte
 {
     public find_handlers_with_the_default_handler_discovery(DefaultApp @default) : base(@default)
     {
-        @default.RecycleIfNecessary();
+        @default.RecycleIfNecessary().GetAwaiter().GetResult();
     }
 
     [Fact]
@@ -54,9 +54,9 @@ public class find_handlers_with_the_default_handler_discovery : IntegrationConte
     }
 
     [Fact]
-    public void ignore_method_marked_as_NotHandler()
+    public async Task ignore_method_marked_as_NotHandler()
     {
-        with(x => x.Handlers.DisableConventionalDiscovery().IncludeType<NetflixHandler>());
+        await with(x => x.Handlers.DisableConventionalDiscovery().IncludeType<NetflixHandler>());
         //withAllDefaults();
         chainFor<MovieAdded>()
             .ShouldNotHaveHandler<NetflixHandler>(x => x.Handles(new MovieAdded()));
@@ -83,17 +83,17 @@ public class customized_finding : IntegrationContext
     }
 
     [Fact]
-    public void extra_suffix()
+    public async Task extra_suffix()
     {
-        with(x => x.Handlers.Discovery(d => d.IncludeClassesSuffixedWith("Watcher")));
+        await with(x => x.Handlers.Discovery(d => d.IncludeClassesSuffixedWith("Watcher")));
 
         chainFor<MovieAdded>().ShouldHaveHandler<MovieWatcher>(x => x.Handle(null));
     }
 
     [Fact]
-    public void handler_types_from_a_marker_interface()
+    public async Task handler_types_from_a_marker_interface()
     {
-        with(x => x.Handlers.Discovery(d => d.IncludeTypesImplementing<IMovieThing>()));
+        await with(x => x.Handlers.Discovery(d => d.IncludeTypesImplementing<IMovieThing>()));
 
         chainFor<MovieAdded>().ShouldHaveHandler<EpisodeWatcher>(x => x.Handle(new MovieAdded()));
     }

@@ -11,9 +11,9 @@ public class DurableComplianceFixture : TransportComplianceFixture, IAsyncLifeti
     {
     }
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
-        SenderIs(opts =>
+        await SenderIs(opts =>
         {
             opts.UseAmazonSqsTransportLocally()
                 .AutoProvision()
@@ -30,7 +30,7 @@ public class DurableComplianceFixture : TransportComplianceFixture, IAsyncLifeti
             opts.ListenToSqsQueue("durable-sender");
         });
 
-        ReceiverIs(opts =>
+        await ReceiverIs(opts =>
         {
             opts.UseAmazonSqsTransportLocally()
                 .AutoProvision()
@@ -46,8 +46,6 @@ public class DurableComplianceFixture : TransportComplianceFixture, IAsyncLifeti
 
             opts.ListenToSqsQueue("durable-receiver");
         });
-
-        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

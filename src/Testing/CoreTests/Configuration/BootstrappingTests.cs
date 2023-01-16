@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using JasperFx.CodeGeneration;
 using JasperFx.CodeGeneration.Frames;
 using JasperFx.CodeGeneration.Model;
@@ -25,9 +26,9 @@ public class BootstrappingTests : IntegrationContext
 
 
     [Fact]
-    public void can_apply_a_wrapper_to_all_chains()
+    public async Task can_apply_a_wrapper_to_all_chains()
     {
-        with(opts => opts.Handlers.AddPolicy<WrapWithSimple>());
+        await with(opts => opts.Handlers.AddPolicy<WrapWithSimple>());
 
         chainFor<MovieAdded>().Middleware.OfType<SimpleWrapper>().Any().ShouldBeTrue();
     }
@@ -42,9 +43,9 @@ public class BootstrappingTests : IntegrationContext
     }
 
     [Fact]
-    public void can_customize_source_code_generation()
+    public async Task can_customize_source_code_generation()
     {
-        with(opts =>
+        await with(opts =>
         {
             opts.Node.CodeGeneration.Sources.Add(new SpecialServiceSource());
             opts.Handlers.IncludeType<SpecialServiceUsingThing>();

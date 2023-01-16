@@ -12,9 +12,9 @@ public class PrefixedComplianceFixture : TransportComplianceFixture, IAsyncLifet
     {
     }
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
-        SenderIs(opts =>
+        await SenderIs(opts =>
         {
             opts.UseAmazonSqsTransportLocally()
                 .PrefixIdentifiers("foo")
@@ -24,7 +24,7 @@ public class PrefixedComplianceFixture : TransportComplianceFixture, IAsyncLifet
             opts.ListenToSqsQueue("buffered-sender");
         });
 
-        ReceiverIs(opts =>
+        await ReceiverIs(opts =>
         {
             opts.UseAmazonSqsTransportLocally()
                 .PrefixIdentifiers("foo")
@@ -33,8 +33,6 @@ public class PrefixedComplianceFixture : TransportComplianceFixture, IAsyncLifet
 
             opts.ListenToSqsQueue("buffered-receiver");
         });
-        
-        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

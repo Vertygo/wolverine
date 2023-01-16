@@ -47,23 +47,21 @@ public abstract class TransportComplianceFixture : IDisposable
     }
 
 
-    protected Task TheOnlyAppIs(Action<WolverineOptions> configure)
+    protected async Task TheOnlyAppIs(Action<WolverineOptions> configure)
     {
         AllLocally = true;
 
-        Sender = WolverineHost.For(options =>
+        Sender = await WolverineHost.For(options =>
         {
             configure(options);
             configureReceiver(options);
             configureSender(options);
         });
-
-        return Task.CompletedTask;
     }
 
-    protected void SenderIs(Action<WolverineOptions> configure)
+    protected async Task SenderIs(Action<WolverineOptions> configure)
     {
-        Sender = WolverineHost.For(opts =>
+        Sender = await WolverineHost.For(opts =>
         {
             configure(opts);
             configureSender(opts);
@@ -84,9 +82,9 @@ public abstract class TransportComplianceFixture : IDisposable
         options.Services.AddResourceSetupOnStartup(StartupAction.ResetState);
     }
 
-    public  void ReceiverIs(Action<WolverineOptions> configure)
+    public async Task ReceiverIs(Action<WolverineOptions> configure)
     {
-        Receiver = WolverineHost.For(opts =>
+        Receiver = await WolverineHost.For(opts =>
         {
             configure(opts);
             configureReceiver(opts);

@@ -21,7 +21,7 @@ public class handler_that_uses_ilogger
     [Fact]
     public async Task can_compile_with_ilogger_dependency_Bug_666()
     {
-        using var host = WolverineHost.Basic();
+        using var host = await WolverineHost.Basic();
 
         var bus = host.Services.GetRequiredService<IMessageBus>();
         await bus.InvokeAsync(new ItemCreated());

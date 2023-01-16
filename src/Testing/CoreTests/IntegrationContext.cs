@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using TestingSupport;
 using TestingSupport.Compliance;
@@ -16,7 +17,7 @@ public class DefaultApp : IDisposable
         {
             x.Handlers.IncludeType<MessageConsumer>();
             x.Handlers.IncludeType<InvokedMessageHandler>();
-        });
+        }).GetAwaiter().GetResult();
     }
 
     public IHost Host { get; private set; }
@@ -27,11 +28,11 @@ public class DefaultApp : IDisposable
         Host = null;
     }
 
-    public void RecycleIfNecessary()
+    public async Task RecycleIfNecessary()
     {
         if (Host == null)
         {
-            Host = WolverineHost.Basic();
+            Host = await WolverineHost.Basic();
         }
     }
 
@@ -48,7 +49,7 @@ public class IntegrationContext : IDisposable, IClassFixture<DefaultApp>
     public IntegrationContext(DefaultApp @default)
     {
         _default = @default;
-        _default.RecycleIfNecessary();
+        _default.RecycleIfNecessary().GetAwaiter().GetResult();
 
         Host = _default.Host;
     }
@@ -66,9 +67,9 @@ public class IntegrationContext : IDisposable, IClassFixture<DefaultApp>
     }
 
 
-    protected void with(Action<WolverineOptions> configuration)
+    protected async Task with(Action<WolverineOptions> configuration)
     {
-        Host = WolverineHost.For(opts =>
+        Host = await WolverineHost.For(opts =>
         {
             configuration(opts);
             opts.Services.Scan(scan =>

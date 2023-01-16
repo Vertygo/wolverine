@@ -13,7 +13,7 @@ public class message_forwarding
     [Fact]
     public async Task send_message_via_forwarding()
     {
-        using var host = WolverineHost.For(opts =>
+        using var host = await WolverineHost.For(opts =>
         {
             opts.Handlers.DisableConventionalDiscovery();
             opts.Handlers.IncludeType<NewMessageHandler>();

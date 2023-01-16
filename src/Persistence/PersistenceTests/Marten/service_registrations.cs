@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using IntegrationTests;
 using Lamar;
 using Marten;
@@ -70,9 +71,9 @@ public class service_registrations : PostgresqlContext
     }
 
     [Fact]
-    public void registers_document_store_in_a_usable_way()
+    public async Task registers_document_store_in_a_usable_way()
     {
-        using var runtime = WolverineHost.For(opts =>
+        using var runtime = await WolverineHost.For(opts =>
         {
             opts.Services.AddMarten(o =>
             {
@@ -84,13 +85,13 @@ public class service_registrations : PostgresqlContext
         var doc = new FakeDoc { Id = Guid.NewGuid() };
 
 
-        using (var session = runtime.Get<IDocumentSession>())
+        await using (var session = runtime.Get<IDocumentSession>())
         {
             session.Store(doc);
             session.SaveChanges();
         }
 
-        using (var query = runtime.Get<IQuerySession>())
+        await using (var query = runtime.Get<IQuerySession>())
         {
             query.Load<FakeDoc>(doc.Id).ShouldNotBeNull();
         }

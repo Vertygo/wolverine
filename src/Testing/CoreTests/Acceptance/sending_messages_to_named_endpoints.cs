@@ -29,25 +29,25 @@ public class sending_messages_to_named_endpoints : IDisposable
             opts.Publish().ToPort(port1).Named("one");
             opts.Publish().ToPort(port2).Named("two");
             opts.Publish().ToPort(port3).Named("three");
-        });
+        }).GetAwaiter().GetResult();
 
         _receiver1 = WolverineHost.For(opts =>
         {
             opts.ListenAtPort(port1);
             opts.ServiceName = "one";
-        });
+        }).GetAwaiter().GetResult();
 
         _receiver2 = WolverineHost.For(opts =>
         {
             opts.ListenAtPort(port2);
             opts.ServiceName = "two";
-        });
+        }).GetAwaiter().GetResult();
 
         _receiver3 = WolverineHost.For(opts =>
         {
             opts.ListenAtPort(port3);
             opts.ServiceName = "three";
-        });
+        }).GetAwaiter().GetResult();
     }
 
     public void Dispose()

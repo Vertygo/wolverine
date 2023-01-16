@@ -13,27 +13,25 @@ public class InlinePulsarTransportFixture : TransportComplianceFixture, IAsyncLi
     {
     }
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
         var topic = Guid.NewGuid().ToString();
         var topicPath = $"persistent://public/default/{topic}";
         OutboundAddress = PulsarEndpoint.UriFor(topicPath);
 
-        ReceiverIs(opts =>
+        await ReceiverIs(opts =>
         {
             opts.UsePulsar();
             opts.ListenToPulsarTopic(topicPath).ProcessInline();
         });
 
-        SenderIs(opts =>
+        await SenderIs(opts =>
         {
             var replyPath = $"persistent://public/default/replies-{topic}";
             opts.UsePulsar();
             opts.ListenToPulsarTopic(replyPath).UseForReplies().ProcessInline();
             opts.PublishAllMessages().ToPulsarTopic(topicPath).SendInline();
         });
-        
-        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

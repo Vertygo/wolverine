@@ -15,9 +15,9 @@ public class DurableComplianceFixture : TransportComplianceFixture, IAsyncLifeti
     {
     }
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
-        SenderIs(opts =>
+        await SenderIs(opts =>
         {
             opts.UseAzureServiceBusTesting()
                 .AutoProvision()
@@ -35,7 +35,7 @@ public class DurableComplianceFixture : TransportComplianceFixture, IAsyncLifeti
             opts.ListenToAzureServiceBusQueue("durable-sender");
         });
 
-        ReceiverIs(opts =>
+        await ReceiverIs(opts =>
         {
             opts.UseAzureServiceBusTesting()
                 .AutoProvision()
@@ -52,8 +52,6 @@ public class DurableComplianceFixture : TransportComplianceFixture, IAsyncLifeti
 
             opts.ListenToAzureServiceBusQueue("durable-receiver");
         });
-        
-        return Task.CompletedTask;
     }
 
     public Task DisposeAsync()

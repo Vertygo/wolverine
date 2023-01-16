@@ -49,7 +49,7 @@ public abstract class DurableFixture<TTriggerHandler, TItemCreatedHandler> : IAs
 
         configureSender(senderRegistry);
 
-        theSender = WolverineHost.For(senderRegistry);
+        theSender = await WolverineHost.For(senderRegistry);
         await theSender.ResetResourceState();
 
 
@@ -65,7 +65,7 @@ public abstract class DurableFixture<TTriggerHandler, TItemCreatedHandler> : IAs
         configureReceiver(receiverRegistry);
 
 
-        theReceiver = WolverineHost.For(receiverRegistry);
+        theReceiver = await WolverineHost.For(receiverRegistry);
         await theReceiver.ResetResourceState();
 
 

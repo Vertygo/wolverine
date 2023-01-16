@@ -9,22 +9,22 @@ namespace Wolverine.AmazonSqs.Tests.ConventionalRouting;
 public class end_to_end_with_conventional_routing : IDisposable
 {
     private readonly IHost _receiver;
+    
     private readonly IHost _sender;
 
     public end_to_end_with_conventional_routing()
     {
+        _receiver = WolverineHost.For(opts =>
+        {
+            opts.UseAmazonSqsTransportLocally().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
+            opts.ServiceName = "Receiver";
+        }).GetAwaiter().GetResult();
         _sender = WolverineHost.For(opts =>
         {
             opts.UseAmazonSqsTransportLocally().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
             opts.Handlers.DisableConventionalDiscovery();
             opts.ServiceName = "Sender";
-        });
-
-        _receiver = WolverineHost.For(opts =>
-        {
-            opts.UseAmazonSqsTransportLocally().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup();
-            opts.ServiceName = "Receiver";
-        });
+        }).GetAwaiter().GetResult();
     }
 
     public void Dispose()

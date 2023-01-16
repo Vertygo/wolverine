@@ -16,7 +16,7 @@ public abstract class ConventionalRoutingContext : IDisposable
         get
         {
             _host ??= WolverineHost.For(opts =>
-                opts.UseAmazonSqsTransportLocally().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup());
+                opts.UseAmazonSqsTransportLocally().UseConventionalRouting().AutoProvision().AutoPurgeOnStartup()).GetAwaiter().GetResult();
 
             return _host.Services.GetRequiredService<IWolverineRuntime>();
         }
@@ -27,14 +27,14 @@ public abstract class ConventionalRoutingContext : IDisposable
         _host?.Dispose();
     }
 
-    internal void ConfigureConventions(Action<AmazonSqsMessageRoutingConvention> configure)
+    internal async Task ConfigureConventions(Action<AmazonSqsMessageRoutingConvention> configure)
     {
-        _host = Host.CreateDefaultBuilder()
+        _host = await Host.CreateDefaultBuilder()
             .UseWolverine(opts =>
             {
                 opts.UseAmazonSqsTransportLocally().UseConventionalRouting(configure).AutoProvision()
                     .AutoPurgeOnStartup();
-            }).Start();
+            }).StartAsync();
     }
 
     internal IMessageRouter RoutingFor<T>()

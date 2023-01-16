@@ -25,7 +25,7 @@ public class transactional_frame_end_to_end : PostgresqlContext
     [Fact]
     public async Task the_transactional_middleware_works()
     {
-        using var host = WolverineHost.For(opts =>
+        using var host = await WolverineHost.For(opts =>
         {
             opts.Services.AddMarten(o =>
             {

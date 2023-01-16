@@ -46,7 +46,7 @@ public class end_to_end_with_persistence : PostgresqlContext, IDisposable, IAsyn
             }).IntegrateWithWolverine();
 
             opts.ListenAtPort(2567);
-        });
+        }).GetAwaiter().GetResult();
 
         theReceiver = WolverineHost.For(opts =>
         {
@@ -59,7 +59,7 @@ public class end_to_end_with_persistence : PostgresqlContext, IDisposable, IAsyn
                 x.Connection(Servers.PostgresConnectionString);
                 x.DatabaseSchemaName = "receiver";
             }).IntegrateWithWolverine();
-        });
+        }).GetAwaiter().GetResult();
     }
 
     public async Task InitializeAsync()
