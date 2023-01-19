@@ -54,7 +54,7 @@ public class EFCorePersistenceContext : BaseContext
 }
 
 [Collection("sqlserver")]
-public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceContext>, IDisposable
+public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceContext>, IDisposable, IAsyncLifetime
 {
     public end_to_end_efcore_persistence(EFCorePersistenceContext context)
     {
@@ -71,6 +71,16 @@ public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceCont
         Host?.StopAsync().GetAwaiter().GetResult();
     }
 
+    public Task InitializeAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    public async Task DisposeAsync()
+    {
+        await Host.StopAsync();
+    }
+    
     [Fact]
     public void service_registrations()
     {
@@ -476,6 +486,7 @@ public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceCont
         loadedEnvelope.OwnerId.ShouldBe(envelope.OwnerId);
         loadedEnvelope.Attempts.ShouldBe(envelope.Attempts);
     }
+
 }
 
 public class PassRecorder
