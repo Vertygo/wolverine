@@ -54,7 +54,7 @@ public class EFCorePersistenceContext : BaseContext
 }
 
 [Collection("sqlserver")]
-public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceContext>
+public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceContext>, IDisposable
 {
     public end_to_end_efcore_persistence(EFCorePersistenceContext context)
     {
@@ -65,6 +65,11 @@ public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceCont
     public Table ItemsTable { get; }
 
     public IHost Host { get; }
+    
+    public void Dispose()
+    {
+        Host?.StopAsync().GetAwaiter().GetResult();
+    }
 
     [Fact]
     public void service_registrations()

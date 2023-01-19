@@ -34,7 +34,7 @@ public class BufferedComplianceFixture : TransportComplianceFixture, IAsyncLifet
 
     public async Task DisposeAsync()
     {
-        await DisposeAsync();
+        await base.DisposeAsync();
     }
 }
 

@@ -52,15 +52,15 @@ public class PostgresqlMessageStoreTests : PostgresqlContext, IDisposable, IAsyn
         thePersistence = (IMessageDatabase)theHost.Services.GetRequiredService<IMessageStore>();
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        Dispose();
-        return Task.CompletedTask;
+        if (theHost != null)
+            await theHost.StopAsync();
     }
 
     public void Dispose()
     {
-        theHost?.Dispose();
+        DisposeAsync().GetAwaiter().GetResult();
     }
 
     [Fact]

@@ -49,7 +49,7 @@ public abstract class DurableFixture<TTriggerHandler, TItemCreatedHandler> : IAs
 
         configureSender(senderRegistry);
 
-        theSender = WolverineHost.For(senderRegistry);
+        theSender = await WolverineHost.ForAsync(senderRegistry);
         await theSender.ResetResourceState();
 
 
@@ -65,19 +65,20 @@ public abstract class DurableFixture<TTriggerHandler, TItemCreatedHandler> : IAs
         configureReceiver(receiverRegistry);
 
 
-        theReceiver = WolverineHost.For(receiverRegistry);
+        theReceiver = await WolverineHost.ForAsync(receiverRegistry);
         await theReceiver.ResetResourceState();
 
 
         await initializeStorage(theSender, theReceiver);
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        theSender?.Dispose();
-        theReceiver?.Dispose();
+        if (theSender != null)
+            await theSender.StopAsync();
 
-        return Task.CompletedTask;
+        if (theReceiver != null)
+            await theReceiver.StopAsync();
     }
 
     private async Task cleanDatabase()

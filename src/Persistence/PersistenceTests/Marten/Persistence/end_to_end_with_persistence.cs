@@ -68,16 +68,18 @@ public class end_to_end_with_persistence : PostgresqlContext, IDisposable, IAsyn
         await theReceiver.ResetResourceState();
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        Dispose();
-        return Task.CompletedTask;
+        if (theSender != null)
+            await theSender.StopAsync();
+
+        if (theReceiver != null)
+            await theReceiver.StopAsync();
     }
 
     public void Dispose()
     {
-        theSender?.Dispose();
-        theReceiver?.Dispose();
+        DisposeAsync().GetAwaiter().GetResult();
     }
 
 

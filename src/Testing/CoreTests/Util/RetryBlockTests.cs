@@ -50,13 +50,14 @@ public class RetryBlockTests
     public async Task retry_within_threshold()
     {
         var theMessage = new SometimesFailingMessage(2, "Aubrey");
-        theBlock.Post(theMessage);
+        await theBlock.PostAsync(theMessage);
         await theMessage.Completion;
+        await theBlock.DrainAsync();
 
         theLogger.Exceptions.Count.ShouldBe(2);
         theLogger.Messages[LogLevel.Error].Count.ShouldBe(2);
 
-        theLogger.Messages[LogLevel.Debug].Single()
+        theLogger.Messages[LogLevel.Debug].First()
             .ShouldBe("Completed Name: Aubrey");
     }
 

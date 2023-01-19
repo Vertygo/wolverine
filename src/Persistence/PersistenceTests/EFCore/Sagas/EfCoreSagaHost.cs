@@ -20,9 +20,9 @@ public class EfCoreSagaHost : ISagaHost
 {
     private IHost _host;
 
-    public IHost BuildHost<TSaga>()
+    public async Task<IHost> BuildHostAsync<TSaga>()
     {
-        _host = WolverineHost.For(opts =>
+        _host = await WolverineHost.ForAsync(opts =>
         {
             opts.Handlers.DisableConventionalDiscovery().IncludeType<TSaga>();
 
@@ -36,7 +36,7 @@ public class EfCoreSagaHost : ISagaHost
         });
 
         // Watch if this hangs, might have to get fancier
-        Initialize().GetAwaiter().GetResult();
+        await Initialize();
 
         return _host;
     }

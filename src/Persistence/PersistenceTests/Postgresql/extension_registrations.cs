@@ -18,7 +18,7 @@ public class extension_registrations : PostgresqlContext
     [Fact]
     public void registrations()
     {
-        using var runtime = WolverineHost.For(x =>
+        var runtime = WolverineHost.For(x =>
             x.PersistMessagesWithPostgresql(Servers.PostgresConnectionString));
 
         var container = runtime.Get<IContainer>();
@@ -34,5 +34,6 @@ public class extension_registrations : PostgresqlContext
         runtime.Get<NpgsqlConnection>().ConnectionString.ShouldBe(Servers.PostgresConnectionString);
         runtime.Get<DbConnection>().ShouldBeOfType<NpgsqlConnection>()
             .ConnectionString.ShouldBe(Servers.PostgresConnectionString);
+        runtime.StopAsync().GetAwaiter().GetResult();
     }
 }
