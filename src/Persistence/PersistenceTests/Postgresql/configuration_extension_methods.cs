@@ -42,7 +42,7 @@ public class configuration_extension_methods : PostgresqlContext
     [Fact]
     public async Task bootstrap_with_connection_string()
     {
-        var runtime = WolverineHost.For(x =>
+        var runtime = await WolverineHost.ForAsync(x =>
             x.PersistMessagesWithPostgresql(Servers.PostgresConnectionString));
         runtime.Get<PostgresqlSettings>()
             .ConnectionString.ShouldBe(Servers.PostgresConnectionString);
