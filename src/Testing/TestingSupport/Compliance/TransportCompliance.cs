@@ -95,7 +95,7 @@ public abstract class TransportComplianceFixture : IDisposable, IAsyncDisposable
 
     public async Task ReceiverIs(Action<WolverineOptions> configure)
     {
-        Receiver = WolverineHost.For(opts =>
+        Receiver = await WolverineHost.ForAsync(opts =>
         {
             configure(opts);
             configureReceiver(opts);
