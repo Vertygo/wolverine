@@ -58,23 +58,21 @@ public abstract class TransportComplianceFixture : IDisposable, IAsyncDisposable
         }
     }
 
-    protected Task TheOnlyAppIs(Action<WolverineOptions> configure)
+    protected async Task TheOnlyAppIs(Action<WolverineOptions> configure)
     {
         AllLocally = true;
 
-        Sender = WolverineHost.For(options =>
+        Sender = await WolverineHost.ForAsync(options =>
         {
             configure(options);
             configureReceiver(options);
             configureSender(options);
         });
-
-        return Task.CompletedTask;
     }
 
     protected async Task SenderIs(Action<WolverineOptions> configure)
     {
-        Sender = WolverineHost.For(opts =>
+        Sender = await WolverineHost.ForAsync(opts =>
         {
             configure(opts);
             configureSender(opts);
