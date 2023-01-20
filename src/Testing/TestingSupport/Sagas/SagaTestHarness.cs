@@ -20,7 +20,10 @@ public class SagaTestHarness<T> : IAsyncLifetime
     
     public async Task DisposeAsync()
     {
-        await _host.StopAsync();
+        if (_host != null)
+        {
+            await _host.StopAsync();
+        }
     }
 
     protected async Task withApplication()
