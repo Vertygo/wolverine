@@ -57,6 +57,8 @@ public class PostgresqlMessageStoreTests : PostgresqlContext, IAsyncLifetime
     {
         if (theHost != null)
             await theHost.StopAsync();
+
+        thePersistence?.Dispose();
     }
 
     [Fact]

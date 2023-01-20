@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using JasperFx.Core;
+using Microsoft.Extensions.Hosting;
 using Wolverine;
 using Wolverine.Runtime.Handlers;
 using Wolverine.Tracking;
@@ -23,6 +24,7 @@ public class SagaTestHarness<T> : IAsyncLifetime
         if (_host != null)
         {
             await _host.StopAsync();
+            _host.SafeDispose();
         }
     }
 
