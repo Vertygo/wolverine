@@ -15,7 +15,7 @@ services:
      - "5672:5672"
      - "15672:15672"
   sqlserver:
-    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
     ports:
       - "1434:1433"
     environment:
