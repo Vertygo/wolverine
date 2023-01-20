@@ -56,7 +56,7 @@ public class DurableComplianceFixture : TransportComplianceFixture, IAsyncLifeti
 
     public async Task DisposeAsync()
     {
-        await DisposeAsync();
+        await base.DisposeAsync();
     }
 
     [Collection("acceptance")]
