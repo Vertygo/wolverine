@@ -36,7 +36,7 @@ jobs:
         echo "### Version: $version" >> $GITHUB_STEP_SUMMARY
     
     - name: OpenSSL config for SQL Server tests
-      run: sed -i 's/openssl_conf = openssl_init/#openssl_conf = openssl_init/g' /etc/ssl/openssl.cnf
+      run: sudo sed -i 's/openssl_conf = openssl_init/#openssl_conf = openssl_init/g' /etc/ssl/openssl.cnf
 
     - name: Test
       run: ./build.sh --no-color test-persistence
