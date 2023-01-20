@@ -28,23 +28,24 @@ using Xunit;
 
 namespace PersistenceTests.Postgresql;
 
-public class PostgresqlMessageStoreTests : PostgresqlContext, IDisposable, IAsyncLifetime
+public class PostgresqlMessageStoreTests : PostgresqlContext, IAsyncLifetime
 {
-    public IHost theHost = WolverineHost.For(opts =>
-    {
-        opts.Services.AddMarten(x =>
-        {
-            x.Connection(Servers.PostgresConnectionString);
-            x.DatabaseSchemaName = "receiver";
-        }).IntegrateWithWolverine();
-
-        opts.ListenAtPort(2345).UseDurableInbox();
-    });
-
+    private IHost theHost;
     private IMessageDatabase thePersistence;
 
     public async Task InitializeAsync()
     {
+        theHost = await WolverineHost.ForAsync(opts =>
+        {
+            opts.Services.AddMarten(x =>
+            {
+                x.Connection(Servers.PostgresConnectionString);
+                x.DatabaseSchemaName = "receiver";
+            }).IntegrateWithWolverine();
+
+            opts.ListenAtPort(PortFinder.GetAvailablePort()).UseDurableInbox();
+        });
+        
         var store = theHost.Get<IDocumentStore>();
         await store.Advanced.Clean.CompletelyRemoveAllAsync();
         await theHost.ResetResourceState();
@@ -56,11 +57,6 @@ public class PostgresqlMessageStoreTests : PostgresqlContext, IDisposable, IAsyn
     {
         if (theHost != null)
             await theHost.StopAsync();
-    }
-
-    public void Dispose()
-    {
-        DisposeAsync().GetAwaiter().GetResult();
     }
 
     [Fact]
