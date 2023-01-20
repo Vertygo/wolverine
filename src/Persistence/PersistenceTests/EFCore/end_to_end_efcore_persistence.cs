@@ -54,7 +54,7 @@ public class EFCorePersistenceContext : BaseContext
 }
 
 [Collection("sqlserver")]
-public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceContext>, IAsyncLifetime
+public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceContext> //, IAsyncLifetime
 {
     public end_to_end_efcore_persistence(EFCorePersistenceContext context)
     {
@@ -66,15 +66,16 @@ public class end_to_end_efcore_persistence : IClassFixture<EFCorePersistenceCont
 
     public IHost Host { get; }
     
-    public Task InitializeAsync()
-    {
-        return Task.CompletedTask;
-    }
-
-    public async Task DisposeAsync()
-    {
-        await Host.StopAsync();
-    }
+    // public Task InitializeAsync()
+    // {
+    //     return Task.CompletedTask;
+    // }
+    //
+    // public async Task DisposeAsync()
+    // {
+    //     await Host.StopAsync();
+    //     Host.Dispose();
+    // }
     
     [Fact]
     public void service_registrations()

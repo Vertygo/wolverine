@@ -75,10 +75,16 @@ public abstract class DurableFixture<TTriggerHandler, TItemCreatedHandler> : IAs
     public async Task DisposeAsync()
     {
         if (theSender != null)
+        {
             await theSender.StopAsync();
+            theSender.Dispose();
+        }
 
         if (theReceiver != null)
+        {
             await theReceiver.StopAsync();
+            theReceiver.Dispose();
+        }
     }
 
     private async Task cleanDatabase()
@@ -272,6 +278,7 @@ public abstract class DurableFixture<TTriggerHandler, TItemCreatedHandler> : IAs
         await cleanDatabase();
 
         // Shutting it down
+        await theReceiver.StopAsync();
         theReceiver.Dispose();
         theReceiver = null;
 
