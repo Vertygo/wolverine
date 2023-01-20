@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Wolverine;
 using Wolverine.Runtime.Handlers;
 using Wolverine.Tracking;
+using Xunit;
 
 namespace TestingSupport.Sagas;
 
-public class SagaTestHarness<T> : IDisposable
+public class SagaTestHarness<T> : IAsyncLifetime
     where T : Saga
 {
     private IHost _host;
@@ -18,12 +17,11 @@ public class SagaTestHarness<T> : IDisposable
     }
 
     public ISagaHost SagaHost { get; }
-
-    public void Dispose()
+    
+    public async Task DisposeAsync()
     {
-        _host?.StopAsync().GetAwaiter().GetResult();
+        await _host.StopAsync();
     }
-
 
     protected async Task withApplication()
     {
@@ -79,4 +77,10 @@ public class SagaTestHarness<T> : IDisposable
     {
         return SagaHost.LoadState<T>(id);
     }
+
+    public Task InitializeAsync()
+    {
+        return Task.CompletedTask;
+    }
+    
 }
