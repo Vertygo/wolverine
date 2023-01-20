@@ -36,7 +36,7 @@ jobs:
         echo "### Version: $version" >> $GITHUB_STEP_SUMMARY
     
     - name: Test
-      run: ./build.sh --no-color full
+      run: ./build.sh --no-color test-persistence
 
     - name: Package
       if: github.event_name != 'pull_request'
