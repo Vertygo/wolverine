@@ -36,7 +36,11 @@ jobs:
         echo "### Version: $version" >> $GITHUB_STEP_SUMMARY
     
     - name: OpenSSL config for SQL Server tests
-      run: sudo sed -i 's/TLSv1.2/TLSv1.0/g' /etc/ssl/openssl.cnf
+      run: |
+        sudo sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf
+        sudo sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1/g' /etc/ssl/openssl.cnf
+        sudo sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /usr/lib/ssl/openssl.cnf
+        sudo sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1/g' /usr/lib/ssl/openssl.cnf
 
     - name: Test
       run: ./build.sh --no-color test-persistence
