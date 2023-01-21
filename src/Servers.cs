@@ -6,5 +6,5 @@ public class Servers
         "Host=localhost;Port=5433;Database=postgres;Username=postgres;password=postgres";
 
     public static readonly string SqlServerConnectionString =
-        "Server=localhost;User Id=sa;Password=P@55w0rd;Timeout=5;Initial Catalog=master;Encrypt=false;TrustServerCertificate=true";
+        "Server=.;User Id=sa;Password=P@55w0rd;Timeout=5;Initial Catalog=master;Encrypt=false;TrustServerCertificate=true";
 }
