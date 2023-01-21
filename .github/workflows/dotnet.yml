@@ -35,10 +35,8 @@ jobs:
         echo "MINVERVERSIONOVERRIDE=$version" >> $GITHUB_ENV
         echo "### Version: $version" >> $GITHUB_STEP_SUMMARY
     
-#    - name: OpenSSL config for SQL Server tests
-#      run: |
-#        sudo sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1/' /etc/ssl/openssl.cnf \
-#        && sudo sed -i 's/CipherString = DEFAULT@SECLEVEL=2/CipherString = DEFAULT@SECLEVEL=1/' /etc/ssl/openssl.cnf
+    - name: OpenSSL config for SQL Server tests
+      run: sudo sed -i 's/TLSv1.2/TLSv1.0/g' /etc/ssl/openssl.cnf
 
     - name: Test
       run: ./build.sh --no-color test-persistence
