@@ -9,12 +9,20 @@ on:
 env:
   config: Release
   disable_test_parallelization: true
+  db_pwd: P@55w0rd
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     timeout-minutes: 20
+  services:
+    sqlserver:
+      image: mcr.microsoft.com/mssql/server:2019-latest
+      ports:
+        - 1433:1433
+      env:
+        ACCEPT_EULA: Y
+        SA_PASSWORD: ${{ env.db_pwd }}
 
     steps:
 
