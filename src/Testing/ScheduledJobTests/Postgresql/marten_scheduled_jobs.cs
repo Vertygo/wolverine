@@ -45,9 +45,9 @@ public class marten_scheduled_jobs : IAsyncLifetime
         await theHost.ResetResourceState();
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        return theHost.StopAsync();
+        await theHost.StopAsync();
     }
 
     protected ValueTask ScheduleMessage(int id, int seconds)

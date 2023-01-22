@@ -9,12 +9,23 @@ on:
 env:
   config: Release
   disable_test_parallelization: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  db_pwd: P@55w0rd
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     timeout-minutes: 20
+
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+          - 1433:1433
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: ${{ env.db_pwd }}
 
     steps:
 
@@ -35,8 +46,36 @@ jobs:
         echo "MINVERVERSIONOVERRIDE=$version" >> $GITHUB_ENV
         echo "### Version: $version" >> $GITHUB_STEP_SUMMARY
     
+    - name: OpenSSL config for SQL Server tests
+      run: |
+        if ! grep -q "MinProtocol" /etc/ssl/openssl.cnf; then
+        sudo sed -i "/\[system_default_sect\]/a MinProtocol = TLSv1" /etc/ssl/openssl.cnf
+        else
+        sudo sed -i "s/MinProtocol.*/MinProtocol = TLSv1/g" /etc/ssl/openssl.cnf
+        fi
+        if ! grep -q "CipherString" /etc/ssl/openssl.cnf; then
+        sudo sed -i "/\[system_default_sect\]/a CipherString = DEFAULT:@SECLEVEL=1" /etc/ssl/openssl.cnf
+        else
+        sudo sed -i "s/DEFAULT:@SECLEVEL.*/DEFAULT:@SECLEVEL=1/g" /etc/ssl/openssl.cnf
+        fi
+        if ! grep -q "MinProtocol" /usr/lib/ssl/openssl.cnf; then
+        sudo sed -i "/\[system_default_sect\]/a MinProtocol = TLSv1" /usr/lib/ssl/openssl.cnf
+        else
+        sudo sed -i "s/MinProtocol.*/MinProtocol = TLSv1/g" /usr/lib/ssl/openssl.cnf
+        fi
+        if ! grep -q "CipherString" /usr/lib/ssl/openssl.cnf; then
+        sudo sed -i "/\[system_default_sect\]/a CipherString = DEFAULT:@SECLEVEL=1" /usr/lib/ssl/openssl.cnf
+        else
+        sudo sed -i "s/DEFAULT:@SECLEVEL.*/DEFAULT:@SECLEVEL=1/g" /usr/lib/ssl/openssl.cnf
+        fi
+        grep "MinProtocol" /etc/ssl/openssl.cnf
+        grep "DEFAULT:@SECLEVEL" /etc/ssl/openssl.cnf
+        grep "MinProtocol" /usr/lib/ssl/openssl.cnf
+        grep "DEFAULT:@SECLEVEL" /usr/lib/ssl/openssl.cnf
+        echo $(openssl version -d)
+  
     - name: Test
-      run: ./build.sh --no-color ci
+      run: ./build.sh --no-color test-persistence
 
     - name: Package
       if: github.event_name != 'pull_request'

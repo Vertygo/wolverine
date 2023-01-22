@@ -16,9 +16,9 @@ namespace PersistenceTests.Postgresql;
 public class extension_registrations : PostgresqlContext
 {
     [Fact]
-    public void registrations()
+    public async Task registrations()
     {
-        using var runtime = WolverineHost.For(x =>
+        var runtime = await WolverineHost.ForAsync(x =>
             x.PersistMessagesWithPostgresql(Servers.PostgresConnectionString));
 
         var container = runtime.Get<IContainer>();
@@ -34,5 +34,6 @@ public class extension_registrations : PostgresqlContext
         runtime.Get<NpgsqlConnection>().ConnectionString.ShouldBe(Servers.PostgresConnectionString);
         runtime.Get<DbConnection>().ShouldBeOfType<NpgsqlConnection>()
             .ConnectionString.ShouldBe(Servers.PostgresConnectionString);
+        await runtime.StopAsync();
     }
 }

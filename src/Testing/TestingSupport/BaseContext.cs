@@ -35,6 +35,6 @@ public abstract class BaseContext : IDisposable
 
     public void Dispose()
     {
-        _host?.Dispose();
+        _host?.StopAsync().GetAwaiter().GetResult();
     }
 }

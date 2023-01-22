@@ -15,9 +15,9 @@ public class MartenSagaHost : ISagaHost
 {
     private IHost _host;
 
-    public IHost BuildHost<TSaga>()
+    public async Task<IHost> BuildHostAsync<TSaga>()
     {
-        _host = WolverineHost.For(opts =>
+        _host = await WolverineHost.ForAsync(opts =>
         {
             opts.Handlers.DisableConventionalDiscovery().IncludeType<TSaga>();
 

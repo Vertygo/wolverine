@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using JasperFx.TypeDiscovery;
 using Microsoft.Extensions.Hosting;
 using Oakton;
@@ -48,6 +46,21 @@ public static class WolverineHost
         return bootstrap(options);
     }
 
+    /// <summary>
+    ///     Builds and initializes a IHost for the options
+    /// </summary>
+    /// <param name="options"></param>
+    /// <returns></returns>    
+    public static Task<IHost> ForAsync(WolverineOptions options)
+    {
+        return bootstrapAsync(options);
+    }
+    
+    /// <summary>
+    ///     Builds and initializes a IHost for the configured WolverineOptions
+    /// </summary>
+    /// <param name="configure"></param>
+    /// <returns></returns>
     public static Task<IHost> ForAsync(Action<WolverineOptions> configure)
     {
         var options = new WolverineOptions();

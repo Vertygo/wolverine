@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <IsPackable>false</IsPackable>
 
         <LangVersion>10</LangVersion>
@@ -10,24 +9,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-
-		<PackageReference Include="GitHubActionsTestLogger" Version="2.0.1"  PrivateAssets="All" />
-		<PackageReference Include="xunit" Version="2.4.1" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
-
-        <PackageReference Include="GitHubActionsTestLogger" Version="2.0.1" PrivateAssets="All" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Wolverine.RDBMS\Wolverine.RDBMS.csproj" />
         <ProjectReference Include="..\Wolverine.EntityFrameworkCore\Wolverine.EntityFrameworkCore.csproj" />
         <ProjectReference Include="..\Wolverine.Marten\Wolverine.Marten.csproj" />
         <ProjectReference Include="..\Wolverine.Postgresql\Wolverine.Postgresql.csproj" />
         <ProjectReference Include="..\Wolverine.SqlServer\Wolverine.SqlServer.csproj" />
         <ProjectReference Include="..\..\Testing\TestingSupport\TestingSupport.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+        <PackageReference Include="System.Data.Common" Version="4.3.0" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+        <PackageReference Include="GitHubActionsTestLogger" Version="2.0.1" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>

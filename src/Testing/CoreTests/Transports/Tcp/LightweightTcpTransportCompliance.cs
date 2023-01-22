@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using TestingSupport;
 using TestingSupport.Compliance;
 using Wolverine.Transports.Tcp;
@@ -15,14 +14,14 @@ public class LightweightTcpFixture : TransportComplianceFixture, IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        await SenderIs(opts => { opts.ListenAtPort(PortFinder.GetAvailablePort()); });
-
         await ReceiverIs(opts => { opts.ListenAtPort(OutboundAddress.Port); });
+
+        await SenderIs(opts => { opts.ListenAtPort(PortFinder.GetAvailablePort()); });
     }
 
     public async Task DisposeAsync()
     {
-        await DisposeAsync();
+        await base.DisposeAsync();
     }
 }
 

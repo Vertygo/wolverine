@@ -20,7 +20,7 @@ public class saga_not_found_usages : SagaTestHarness<SteppedSaga>
     [Fact]
     public async Task call_not_found_when_saga_does_not_exist()
     {
-        withApplication();
+        await withApplication();
 
         _output.WriteLine(codeFor<CompleteOne>());
 
@@ -33,7 +33,7 @@ public class saga_not_found_usages : SagaTestHarness<SteppedSaga>
     [Fact]
     public async Task not_found_not_called_if_the_saga_is_found()
     {
-        withApplication();
+        await withApplication();
 
         SteppedSaga.NotFoundCommand = null;
 
@@ -49,7 +49,7 @@ public class saga_not_found_usages : SagaTestHarness<SteppedSaga>
     [Fact]
     public async Task should_throw_exception_on_saga_not_found_with_no_alternative_handler()
     {
-        withApplication();
+        await withApplication();
 
         var sagaId = Guid.NewGuid();
 
@@ -67,7 +67,7 @@ public class saga_not_found_usages : SagaTestHarness<SteppedSaga>
     [Fact]
     public async Task StartOrHandle_works_if_new()
     {
-        withApplication();
+        await withApplication();
 
         var id = Guid.NewGuid();
         await send(new CompleteTwo(), id);

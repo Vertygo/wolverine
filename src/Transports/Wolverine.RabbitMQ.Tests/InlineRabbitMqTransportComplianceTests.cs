@@ -37,7 +37,7 @@ public class InlineRabbitMqTransportFixture : TransportComplianceFixture, IAsync
 
     public async Task DisposeAsync()
     {
-        await DisposeAsync();
+        await base.DisposeAsync();
     }
 }
 

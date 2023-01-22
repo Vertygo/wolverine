@@ -60,15 +60,14 @@ public class MartenBackedMessagePersistenceTests : PostgresqlContext, IDisposabl
             .FirstOrDefault(x => x.Id == theEnvelope.Id);
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        Dispose();
-        return Task.CompletedTask;
+        await theHost.StopAsync();
     }
 
     public void Dispose()
     {
-        theHost.Dispose();
+        DisposeAsync().GetAwaiter().GetResult();
     }
 
     [Fact]

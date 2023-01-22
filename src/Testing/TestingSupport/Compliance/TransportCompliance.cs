@@ -48,30 +48,33 @@ public abstract class TransportComplianceFixture : IDisposable, IAsyncDisposable
     
     public async ValueTask DisposeAsync()
     {
-        await Sender?.StopAsync();
-        if (!ReferenceEquals(Sender, Receiver))
+        if (Sender != null)
         {
-            await Receiver?.StopAsync();
+            await Sender.StopAsync();
+            Sender.Dispose();
+        }
+        if (Receiver != null && !ReferenceEquals(Sender, Receiver))
+        {
+            await Receiver.StopAsync();
+            Receiver.Dispose();
         }
     }
 
-    protected Task TheOnlyAppIs(Action<WolverineOptions> configure)
+    protected async Task TheOnlyAppIs(Action<WolverineOptions> configure)
     {
         AllLocally = true;
 
-        Sender = WolverineHost.For(options =>
+        Sender = await WolverineHost.ForAsync(options =>
         {
             configure(options);
             configureReceiver(options);
             configureSender(options);
         });
-
-        return Task.CompletedTask;
     }
 
     protected async Task SenderIs(Action<WolverineOptions> configure)
     {
-        Sender = WolverineHost.For(opts =>
+        Sender = await WolverineHost.ForAsync(opts =>
         {
             configure(opts);
             configureSender(opts);
@@ -94,7 +97,7 @@ public abstract class TransportComplianceFixture : IDisposable, IAsyncDisposable
 
     public async Task ReceiverIs(Action<WolverineOptions> configure)
     {
-        Receiver = WolverineHost.For(opts =>
+        Receiver = await WolverineHost.ForAsync(opts =>
         {
             configure(opts);
             configureReceiver(opts);
@@ -180,6 +183,14 @@ public abstract class TransportCompliance<T> : IAsyncLifetime where T : Transpor
         else
         {
             Fixture?.SafeDispose();
+            if (theSender != null)
+            {
+                await theSender.StopAsync();
+            }
+            if (theReceiver != null && !ReferenceEquals(theSender, theReceiver))
+            {
+                await theReceiver.StopAsync();
+            }
         }
     }
 
@@ -371,7 +382,7 @@ public abstract class TransportCompliance<T> : IAsyncLifetime where T : Transpor
     public async Task schedule_send()
     {
         var session = await theSender
-            .TrackActivity(Fixture.DefaultTimeout)
+            .TrackActivity(15.Seconds())
             .AlsoTrack(theReceiver)
             .Timeout(15.Seconds())
             .WaitForMessageToBeReceivedAt<ColorChosen>(theReceiver ?? theSender)

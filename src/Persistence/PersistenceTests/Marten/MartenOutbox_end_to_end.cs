@@ -5,6 +5,7 @@ using Lamar;
 using Marten;
 using Microsoft.Extensions.Hosting;
 using Shouldly;
+using TestingSupport;
 using Wolverine;
 using Wolverine.Marten;
 using Xunit;
@@ -17,21 +18,20 @@ public class MartenOutbox_end_to_end : PostgresqlContext, IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        _host = await Host.CreateDefaultBuilder()
-            .UseWolverine(opts =>
-            {
-                opts.Services.AddMarten(Servers.PostgresConnectionString)
-                    .IntegrateWithWolverine();
+        _host = await WolverineHost.ForAsync(opts =>
+        {
+            opts.Services.AddMarten(Servers.PostgresConnectionString)
+                .IntegrateWithWolverine();
 
-                opts.Policies.UseDurableLocalQueues();
-                opts.Policies.ConfigureConventionalLocalRouting()
-                    .CustomizeQueues((_, q) => q.UseDurableInbox());
-            }).StartAsync();
+            opts.Policies.UseDurableLocalQueues();
+            opts.Policies.ConfigureConventionalLocalRouting()
+                .CustomizeQueues((_, q) => q.UseDurableInbox());
+        });
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        return _host.StopAsync();
+        await _host.StopAsync();
     }
 
     [Fact]
