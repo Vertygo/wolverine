@@ -51,10 +51,12 @@ public abstract class TransportComplianceFixture : IDisposable, IAsyncDisposable
         if (Sender != null)
         {
             await Sender.StopAsync();
+            Sender.Dispose();
         }
         if (Receiver != null && !ReferenceEquals(Sender, Receiver))
         {
             await Receiver.StopAsync();
+            Receiver.Dispose();
         }
     }
 
