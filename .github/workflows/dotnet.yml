@@ -37,11 +37,21 @@ jobs:
     
     - name: OpenSSL config for SQL Server tests
       run: |
-        sudo sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf
-        sudo sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1/g' /etc/ssl/openssl.cnf
-        sudo sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /usr/lib/ssl/openssl.cnf
-        sudo sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1/g' /usr/lib/ssl/openssl.cnf
-
+        MIN_PROTOCOL="TLSv1"
+        SECLEVEL="1"
+        if ! grep -q "MinProtocol" /etc/ssl/openssl.cnf; then
+        sudo sed -i "/\[ system_default_sect \]/a MinProtocol = $MIN_PROTOCOL" /etc/ssl/openssl.cnf
+        else
+        sudo sed -i "s/MinProtocol.*/MinProtocol = $MIN_PROTOCOL/g" /etc/ssl/openssl.cnf
+        fi
+        if ! grep -q "DEFAULT@SECLEVEL" /etc/ssl/openssl.cnf; then
+        sudo sed -i "/\[ system_default_sect \]/a DEFAULT@SECLEVEL = $SECLEVEL" /etc/ssl/openssl.cnf
+        else
+        sudo sed -i "s/DEFAULT@SECLEVEL.*/DEFAULT@SECLEVEL = $SECLEVEL/g" /etc/ssl/openssl.cnf
+        fi
+        grep "MinProtocol" /etc/ssl/openssl.cnf
+        grep "DEFAULT@SECLEVEL" /etc/ssl/openssl.cnf
+  
     - name: Test
       run: ./build.sh --no-color test-persistence
 
