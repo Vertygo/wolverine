@@ -28,7 +28,7 @@ public class LongDoThree
     [SagaIdentity] public long TheSagaId { get; set; }
 }
 
-public class c1LongIdentifiedSagaComplianceSpecs<T> : SagaTestHarness<LongBasicWorkflow> where T : ISagaHost, new()
+public class LongIdentifiedSagaComplianceSpecs<T> : SagaTestHarness<LongBasicWorkflow> where T : ISagaHost, new()
 {
     private readonly long stateId = new Random().Next();
 
