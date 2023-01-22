@@ -20,7 +20,7 @@ services:
       - "1433:1433"
     environment:
       - "ACCEPT_EULA=Y"
-      - "SA_PASSWORD=Str0ngPa$$w0rd"
+      - "SA_PASSWORD=P@55w0rd"
       - "MSSQL_PID=Developer"
 #    command: |
 #      systemctl stop mssql-server 
